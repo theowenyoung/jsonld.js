@@ -49,6 +49,7 @@
     "cors": "^2.7.1",
     "cross-env": "^7.0.3",
     "envify": "^4.1.0",
+    "esbuild": "^0.14.11",
     "eslint": "^7.23.0",
     "eslint-config-digitalbazaar": "^2.6.1",
     "esmify": "^2.1.1",
@@ -89,6 +90,7 @@
     "jsonld"
   ],
   "scripts": {
+    "es": "esbuild lib/index.js --bundle --format=esm --outfile=index.js",
     "prepublish": "npm run build",
     "build": "npm run build-webpack",
     "build-webpack": "webpack",

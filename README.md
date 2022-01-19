@@ -1,12 +1,15 @@
-jsonld.js
-=========
+# jsonld.js
 
 [![Build status](https://img.shields.io/github/workflow/status/digitalbazaar/jsonld.js/Node.js%20CI)](https://github.com/digitalbazaar/jsonld.js/actions?query=workflow%3A%22Node.js+CI%22)
 [![Coverage status](https://img.shields.io/codecov/c/github/digitalbazaar/jsonld.js)](https://codecov.io/gh/digitalbazaar/jsonld.js)
 [![Dependency Status](https://img.shields.io/david/digitalbazaar/jsonld.js.svg)](https://david-dm.org/digitalbazaar/jsonld.js)
 
-Introduction
-------------
+## Introduction
+
+---
+
+> Remove rdf, adpat for deno
+> npm run es
 
 This library is an implementation of the [JSON-LD][] specification in
 JavaScript.
@@ -38,51 +41,49 @@ to JSON with added semantics. Finally, the format is intended to be fast
 to parse, fast to generate, stream-based and document-based processing
 compatible, and require a very small memory footprint in order to operate.
 
-Conformance
------------
+## Conformance
 
 This library aims to conform with the following:
 
-* [JSON-LD 1.0][],
+- [JSON-LD 1.0][],
   W3C Recommendation,
   2014-01-16, and any [errata][]
-* [JSON-LD 1.0 Processing Algorithms and API][JSON-LD 1.0 API],
+- [JSON-LD 1.0 Processing Algorithms and API][json-ld 1.0 api],
   W3C Recommendation,
   2014-01-16, and any [errata][]
-* [JSON-LD 1.0 Framing][JSON-LD 1.0 Framing],
+- [JSON-LD 1.0 Framing][json-ld 1.0 framing],
   Unofficial Draft,
   2012-08-30
-* [JSON-LD 1.1][JSON-LD CG 1.1],
+- [JSON-LD 1.1][json-ld cg 1.1],
   Draft Community Group Report,
-  2018-06-07 or [newer][JSON-LD CG latest]
-* [JSON-LD 1.1 Processing Algorithms and API][JSON-LD CG 1.1 API],
+  2018-06-07 or [newer][json-ld cg latest]
+- [JSON-LD 1.1 Processing Algorithms and API][json-ld cg 1.1 api],
   Draft Community Group Report,
-  2018-06-07 or [newer][JSON-LD CG API latest]
-* [JSON-LD 1.1 Framing][JSON-LD CG 1.1 Framing],
+  2018-06-07 or [newer][json-ld cg api latest]
+- [JSON-LD 1.1 Framing][json-ld cg 1.1 framing],
   Draft Community Group Report,
-  2018-06-07 or [newer][JSON-LD CG Framing latest]
-* Community Group [test suite][]
+  2018-06-07 or [newer][json-ld cg framing latest]
+- Community Group [test suite][]
 
-The [JSON-LD Working Group][JSON-LD WG] is now developing JSON-LD 1.1. Library
+The [JSON-LD Working Group][json-ld wg] is now developing JSON-LD 1.1. Library
 updates to conform with newer specifications will happen as features stabilize
 and development time and resources permit.
 
-* [JSON-LD 1.1][JSON-LD WG 1.1],
+- [JSON-LD 1.1][json-ld wg 1.1],
   W3C Working Draft,
-  2018-12-14 or [newer][JSON-LD WG latest]
-* [JSON-LD 1.1 Processing Algorithms and API][JSON-LD WG 1.1 API],
+  2018-12-14 or [newer][json-ld wg latest]
+- [JSON-LD 1.1 Processing Algorithms and API][json-ld wg 1.1 api],
   W3C Working Draft,
-  2018-12-14 or [newer][JSON-LD WG API latest]
-* [JSON-LD 1.1 Framing][JSON-LD WG 1.1 Framing],
+  2018-12-14 or [newer][json-ld wg api latest]
+- [JSON-LD 1.1 Framing][json-ld wg 1.1 framing],
   W3C Working Draft,
-  2018-12-14 or [newer][JSON-LD WG Framing latest]
-* Working Group [test suite][WG test suite]
+  2018-12-14 or [newer][json-ld wg framing latest]
+- Working Group [test suite][wg test suite]
 
 The [test runner][] is often updated to note or skip newer tests that are not
 yet supported.
 
-Installation
-------------
+## Installation
 
 ### Node.js + npm
 
@@ -91,7 +92,7 @@ npm install jsonld
 ```
 
 ```js
-const jsonld = require('jsonld');
+const jsonld = require("jsonld");
 ```
 
 ### Browser (bundler) + npm
@@ -110,7 +111,7 @@ The built npm package includes bundled code suitable for use in browsers. Two
 versions are provided:
 
 - `./dist/jsonld.min.js`: A version built for wide compatibility with modern
-  and older browsers.  Includes many polyfills and code transformations and is
+  and older browsers. Includes many polyfills and code transformations and is
   larger and less efficient.
 - `./dist/jsonld.esm.min.js`: A version built for features available in
   browsers that support ES Modules. Fewer polyfills and transformations are
@@ -155,7 +156,6 @@ See https://www.jsdelivr.com/package/npm/jsonld for the latest available version
 To use [unpkg](https://unpkg.com/) include this script tag:
 
 ```html
-
 <script src="https://unpkg.com/jsonld@1.0.0/dist/jsonld.min.js"></script>
 ```
 
@@ -167,12 +167,12 @@ See https://unpkg.com/jsonld/ for the latest available version.
 jspm install npm:jsonld
 ```
 
-``` js
-import * as jsonld from 'jsonld';
+```js
+import * as jsonld from "jsonld";
 // or
-import {promises} from 'jsonld';
+import { promises } from "jsonld";
 // or
-import {JsonLdProcessor} from 'jsonld';
+import { JsonLdProcessor } from "jsonld";
 ```
 
 ### Node.js native canonize bindings
@@ -189,20 +189,22 @@ npm install jsonld
 npm install rdf-canonize-native
 ```
 
-Examples
---------
+## Examples
 
 Example data and context used throughout examples below:
+
 ```js
 const doc = {
   "http://schema.org/name": "Manu Sporny",
-  "http://schema.org/url": {"@id": "http://manu.sporny.org/"},
-  "http://schema.org/image": {"@id": "http://manu.sporny.org/images/manu.png"}
+  "http://schema.org/url": { "@id": "http://manu.sporny.org/" },
+  "http://schema.org/image": {
+    "@id": "http://manu.sporny.org/images/manu.png",
+  },
 };
 const context = {
-  "name": "http://schema.org/name",
-  "homepage": {"@id": "http://schema.org/url", "@type": "@id"},
-  "image": {"@id": "http://schema.org/image", "@type": "@id"}
+  name: "http://schema.org/name",
+  homepage: { "@id": "http://schema.org/url", "@type": "@id" },
+  image: { "@id": "http://schema.org/image", "@type": "@id" },
 };
 ```
 
@@ -265,8 +267,8 @@ const framed = await jsonld.frame(doc, frame);
 // canonize (normalize) a document using the RDF Dataset Normalization Algorithm
 // (URDNA2015), see:
 const canonized = await jsonld.canonize(doc, {
-  algorithm: 'URDNA2015',
-  format: 'application/n-quads'
+  algorithm: "URDNA2015",
+  format: "application/n-quads",
 });
 // canonized is a string that is a canonical representation of the document
 // that can be used for hashing, comparison, etc.
@@ -276,7 +278,7 @@ const canonized = await jsonld.canonize(doc, {
 
 ```js
 // serialize a document to N-Quads (RDF)
-const nquads = await jsonld.toRDF(doc, {format: 'application/n-quads'});
+const nquads = await jsonld.toRDF(doc, { format: "application/n-quads" });
 // nquads is a string of N-Quads
 ```
 
@@ -284,7 +286,7 @@ const nquads = await jsonld.toRDF(doc, {format: 'application/n-quads'});
 
 ```js
 // deserialize N-Quads (RDF) to JSON-LD
-const doc = await jsonld.fromRDF(nquads, {format: 'application/n-quads'});
+const doc = await jsonld.fromRDF(nquads, { format: "application/n-quads" });
 // doc is JSON-LD
 ```
 
@@ -346,30 +348,26 @@ It is recommended to set a default `user-agent` header for Node.js
 applications. The default for the default Node.js document loader is
 `jsonld.js`.
 
-Related Modules
----------------
+## Related Modules
 
-* [jsonld-cli][]: A command line interface tool called `jsonld` that exposes
+- [jsonld-cli][]: A command line interface tool called `jsonld` that exposes
   most of the basic jsonld.js API.
-* [jsonld-request][]: A module that can read data from stdin, URLs, and files
+- [jsonld-request][]: A module that can read data from stdin, URLs, and files
   and in various formats and return JSON-LD.
 
-Commercial Support
-------------------
+## Commercial Support
 
 Commercial support for this library is available upon request from
 [Digital Bazaar][]: support@digitalbazaar.com
 
-Source
-------
+## Source
 
 The source code for the JavaScript implementation of the JSON-LD API
 is available at:
 
 http://github.com/digitalbazaar/jsonld.js
 
-Tests
------
+## Tests
 
 This library includes a sample testing utility which may be used to verify
 that changes to the processor maintain the correct output.
@@ -447,45 +445,38 @@ instructions](https://github.com/w3c/json-ld-api/tree/master/reports) to
 generate the HTML report for inspection. Maintainers can
 [submit](https://github.com/w3c/json-ld-api/pulls) updated results as needed.
 
-Benchmarks
-----------
+## Benchmarks
 
 Benchmarks can be created from any manifest that the test system supports.
 Use a command line with a test suite and a benchmark flag:
 
     JSONLD_TESTS=/tmp/benchmark-manifest.jsonld JSONLD_BENCHMARK=1 npm test
 
-[Digital Bazaar]: https://digitalbazaar.com/
-
-[JSON-LD 1.0 API]: http://www.w3.org/TR/2014/REC-json-ld-api-20140116/
-[JSON-LD 1.0 Framing]: https://json-ld.org/spec/ED/json-ld-framing/20120830/
-[JSON-LD 1.0]: http://www.w3.org/TR/2014/REC-json-ld-20140116/
-
-[JSON-LD CG 1.1 API]: https://json-ld.org/spec/FCGS/json-ld-api/20180607/
-[JSON-LD CG 1.1 Framing]: https://json-ld.org/spec/FCGS/json-ld-framing/20180607/
-[JSON-LD CG 1.1]: https://json-ld.org/spec/FCGS/json-ld/20180607/
-
-[JSON-LD CG API latest]: https://json-ld.org/spec/latest/json-ld-api/
-[JSON-LD CG Framing latest]: https://json-ld.org/spec/latest/json-ld-framing/
-[JSON-LD CG latest]: https://json-ld.org/spec/latest/json-ld/
-
-[JSON-LD WG 1.1 API]: https://www.w3.org/TR/json-ld11-api/
-[JSON-LD WG 1.1 Framing]: https://www.w3.org/TR/json-ld11-framing/
-[JSON-LD WG 1.1]: https://www.w3.org/TR/json-ld11/
-
-[JSON-LD WG API latest]: https://w3c.github.io/json-ld-api/
-[JSON-LD WG Framing latest]: https://w3c.github.io/json-ld-framing/
-[JSON-LD WG latest]: https://w3c.github.io/json-ld-syntax/
-
-[JSON-LD Processor Conformance]: https://w3c.github.io/json-ld-api/reports
-[JSON-LD WG]: https://www.w3.org/2018/json-ld-wg/
-[JSON-LD]: https://json-ld.org/
-[Microdata]: http://www.w3.org/TR/microdata/
-[Microformats]: http://microformats.org/
-[RDFa]: http://www.w3.org/TR/rdfa-core/
-[RFC7159]: http://tools.ietf.org/html/rfc7159
-[Rollup]: https://rollupjs.org/
-[WG test suite]: https://github.com/w3c/json-ld-api/tree/master/tests
+[digital bazaar]: https://digitalbazaar.com/
+[json-ld 1.0 api]: http://www.w3.org/TR/2014/REC-json-ld-api-20140116/
+[json-ld 1.0 framing]: https://json-ld.org/spec/ED/json-ld-framing/20120830/
+[json-ld 1.0]: http://www.w3.org/TR/2014/REC-json-ld-20140116/
+[json-ld cg 1.1 api]: https://json-ld.org/spec/FCGS/json-ld-api/20180607/
+[json-ld cg 1.1 framing]: https://json-ld.org/spec/FCGS/json-ld-framing/20180607/
+[json-ld cg 1.1]: https://json-ld.org/spec/FCGS/json-ld/20180607/
+[json-ld cg api latest]: https://json-ld.org/spec/latest/json-ld-api/
+[json-ld cg framing latest]: https://json-ld.org/spec/latest/json-ld-framing/
+[json-ld cg latest]: https://json-ld.org/spec/latest/json-ld/
+[json-ld wg 1.1 api]: https://www.w3.org/TR/json-ld11-api/
+[json-ld wg 1.1 framing]: https://www.w3.org/TR/json-ld11-framing/
+[json-ld wg 1.1]: https://www.w3.org/TR/json-ld11/
+[json-ld wg api latest]: https://w3c.github.io/json-ld-api/
+[json-ld wg framing latest]: https://w3c.github.io/json-ld-framing/
+[json-ld wg latest]: https://w3c.github.io/json-ld-syntax/
+[json-ld processor conformance]: https://w3c.github.io/json-ld-api/reports
+[json-ld wg]: https://www.w3.org/2018/json-ld-wg/
+[json-ld]: https://json-ld.org/
+[microdata]: http://www.w3.org/TR/microdata/
+[microformats]: http://microformats.org/
+[rdfa]: http://www.w3.org/TR/rdfa-core/
+[rfc7159]: http://tools.ietf.org/html/rfc7159
+[rollup]: https://rollupjs.org/
+[wg test suite]: https://github.com/w3c/json-ld-api/tree/master/tests
 [errata]: http://www.w3.org/2014/json-ld-errata
 [jsonld-cli]: https://github.com/digitalbazaar/jsonld-cli
 [jsonld-request]: https://github.com/digitalbazaar/jsonld-request
