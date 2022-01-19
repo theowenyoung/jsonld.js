@@ -1,12 +1,7 @@
 var __getOwnPropNames = Object.getOwnPropertyNames;
-var __commonJS = (cb, mod) =>
-  function __require() {
-    return (
-      mod ||
-        (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod),
-      mod.exports
-    );
-  };
+var __commonJS = (cb, mod) => function __require() {
+  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+};
 
 // lib/types.js
 var require_types = __commonJS({
@@ -15,23 +10,15 @@ var require_types = __commonJS({
     var api = {};
     module.exports = api;
     api.isArray = Array.isArray;
-    api.isBoolean = (v) =>
-      typeof v === "boolean" ||
-      Object.prototype.toString.call(v) === "[object Boolean]";
-    api.isDouble = (v) =>
-      api.isNumber(v) && (String(v).indexOf(".") !== -1 || Math.abs(v) >= 1e21);
+    api.isBoolean = (v) => typeof v === "boolean" || Object.prototype.toString.call(v) === "[object Boolean]";
+    api.isDouble = (v) => api.isNumber(v) && (String(v).indexOf(".") !== -1 || Math.abs(v) >= 1e21);
     api.isEmptyObject = (v) => api.isObject(v) && Object.keys(v).length === 0;
-    api.isNumber = (v) =>
-      typeof v === "number" ||
-      Object.prototype.toString.call(v) === "[object Number]";
+    api.isNumber = (v) => typeof v === "number" || Object.prototype.toString.call(v) === "[object Number]";
     api.isNumeric = (v) => !isNaN(parseFloat(v)) && isFinite(v);
-    api.isObject = (v) =>
-      Object.prototype.toString.call(v) === "[object Object]";
-    api.isString = (v) =>
-      typeof v === "string" ||
-      Object.prototype.toString.call(v) === "[object String]";
+    api.isObject = (v) => Object.prototype.toString.call(v) === "[object Object]";
+    api.isString = (v) => typeof v === "string" || Object.prototype.toString.call(v) === "[object String]";
     api.isUndefined = (v) => typeof v === "undefined";
-  },
+  }
 });
 
 // lib/graphTypes.js
@@ -42,26 +29,17 @@ var require_graphTypes = __commonJS({
     var api = {};
     module.exports = api;
     api.isSubject = (v) => {
-      if (
-        types.isObject(v) &&
-        !("@value" in v || "@set" in v || "@list" in v)
-      ) {
+      if (types.isObject(v) && !("@value" in v || "@set" in v || "@list" in v)) {
         const keyCount = Object.keys(v).length;
         return keyCount > 1 || !("@id" in v);
       }
       return false;
     };
-    api.isSubjectReference = (v) =>
-      types.isObject(v) && Object.keys(v).length === 1 && "@id" in v;
+    api.isSubjectReference = (v) => types.isObject(v) && Object.keys(v).length === 1 && "@id" in v;
     api.isValue = (v) => types.isObject(v) && "@value" in v;
     api.isList = (v) => types.isObject(v) && "@list" in v;
     api.isGraph = (v) => {
-      return (
-        types.isObject(v) &&
-        "@graph" in v &&
-        Object.keys(v).filter((key) => key !== "@id" && key !== "@index")
-          .length === 1
-      );
+      return types.isObject(v) && "@graph" in v && Object.keys(v).filter((key) => key !== "@id" && key !== "@index").length === 1;
     };
     api.isSimpleGraph = (v) => {
       return api.isGraph(v) && !("@id" in v);
@@ -71,14 +49,11 @@ var require_graphTypes = __commonJS({
         if ("@id" in v) {
           return v["@id"].indexOf("_:") === 0;
         }
-        return (
-          Object.keys(v).length === 0 ||
-          !("@value" in v || "@set" in v || "@list" in v)
-        );
+        return Object.keys(v).length === 0 || !("@value" in v || "@set" in v || "@list" in v);
       }
       return false;
     };
-  },
+  }
 });
 
 // lib/JsonLdError.js
@@ -86,18 +61,14 @@ var require_JsonLdError = __commonJS({
   "lib/JsonLdError.js"(exports, module) {
     "use strict";
     module.exports = class JsonLdError extends Error {
-      constructor(
-        message = "An unspecified JSON-LD error occurred.",
-        name = "jsonld.Error",
-        details = {}
-      ) {
+      constructor(message = "An unspecified JSON-LD error occurred.", name = "jsonld.Error", details = {}) {
         super(message);
         this.name = name;
         this.message = message;
         this.details = details;
       }
     };
-  },
+  }
 });
 
 // lib/util.js
@@ -109,16 +80,15 @@ var require_util = __commonJS({
     var JsonLdError = require_JsonLdError();
     var REGEX_LINK_HEADERS = /(?:<[^>]*?>|"[^"]*?"|[^,])+/g;
     var REGEX_LINK_HEADER = /\s*<([^>]*?)>\s*(?:;\s*(.*))?/;
-    var REGEX_LINK_HEADER_PARAMS =
-      /(.*?)=(?:(?:"([^"]*?)")|([^"]*?))\s*(?:(?:;\s*)|$)/g;
+    var REGEX_LINK_HEADER_PARAMS = /(.*?)=(?:(?:"([^"]*?)")|([^"]*?))\s*(?:(?:;\s*)|$)/g;
     var DEFAULTS = {
       headers: {
-        accept: "application/ld+json, application/json",
-      },
+        accept: "application/ld+json, application/json"
+      }
     };
     var api = {};
     module.exports = api;
-    api.clone = function (value) {
+    api.clone = function(value) {
       if (value && typeof value === "object") {
         let rval;
         if (types.isArray(value)) {
@@ -148,19 +118,13 @@ var require_util = __commonJS({
       }
       return value;
     };
-    api.asArray = function (value) {
+    api.asArray = function(value) {
       return Array.isArray(value) ? value : [value];
     };
     api.buildHeaders = (headers = {}) => {
-      const hasAccept = Object.keys(headers).some(
-        (h) => h.toLowerCase() === "accept"
-      );
+      const hasAccept = Object.keys(headers).some((h) => h.toLowerCase() === "accept");
       if (hasAccept) {
-        throw new RangeError(
-          'Accept header may not be specified; only "' +
-            DEFAULTS.headers.accept +
-            '" is supported.'
-        );
+        throw new RangeError('Accept header may not be specified; only "' + DEFAULTS.headers.accept + '" is supported.');
       }
       return Object.assign({ Accept: DEFAULTS.headers.accept }, headers);
     };
@@ -174,7 +138,7 @@ var require_util = __commonJS({
         }
         const result = { target: match[1] };
         const params = match[2];
-        while ((match = REGEX_LINK_HEADER_PARAMS.exec(params))) {
+        while (match = REGEX_LINK_HEADER_PARAMS.exec(params)) {
           result[match[1]] = match[2] === void 0 ? match[3] : match[2];
         }
         const rel = result.rel || "";
@@ -200,19 +164,12 @@ var require_util = __commonJS({
           case 0:
             return;
           case 1:
-            if (
-              "@default" in v &&
-              api.asArray(v["@default"]).every((vv) => types.isString(vv))
-            ) {
+            if ("@default" in v && api.asArray(v["@default"]).every((vv) => types.isString(vv))) {
               return;
             }
         }
       }
-      throw new JsonLdError(
-        'Invalid JSON-LD syntax; "@type" value must a string, an array of strings, an empty object, or a default object.',
-        "jsonld.SyntaxError",
-        { code: "invalid type value", value: v }
-      );
+      throw new JsonLdError('Invalid JSON-LD syntax; "@type" value must a string, an array of strings, an empty object, or a default object.', "jsonld.SyntaxError", { code: "invalid type value", value: v });
     };
     api.hasProperty = (subject, property) => {
       if (subject.hasOwnProperty(property)) {
@@ -257,11 +214,7 @@ var require_util = __commonJS({
       if (options.valueIsArray) {
         subject[property] = value;
       } else if (types.isArray(value)) {
-        if (
-          value.length === 0 &&
-          options.propertyIsArray &&
-          !subject.hasOwnProperty(property)
-        ) {
+        if (value.length === 0 && options.propertyIsArray && !subject.hasOwnProperty(property)) {
           subject[property] = [];
         }
         if (options.prependValue) {
@@ -272,12 +225,8 @@ var require_util = __commonJS({
           api.addValue(subject, property, value[i], options);
         }
       } else if (subject.hasOwnProperty(property)) {
-        const hasValue =
-          !options.allowDuplicate && api.hasValue(subject, property, value);
-        if (
-          !types.isArray(subject[property]) &&
-          (!hasValue || options.propertyIsArray)
-        ) {
+        const hasValue = !options.allowDuplicate && api.hasValue(subject, property, value);
+        if (!types.isArray(subject[property]) && (!hasValue || options.propertyIsArray)) {
           subject[property] = [subject[property]];
         }
         if (!hasValue) {
@@ -300,9 +249,7 @@ var require_util = __commonJS({
       if (!("propertyIsArray" in options)) {
         options.propertyIsArray = false;
       }
-      const values = api
-        .getValues(subject, property)
-        .filter((e) => !api.compareValues(e, value));
+      const values = api.getValues(subject, property).filter((e) => !api.compareValues(e, value));
       if (values.length === 0) {
         api.removeProperty(subject, property);
       } else if (values.length === 1 && !options.propertyIsArray) {
@@ -320,22 +267,10 @@ var require_util = __commonJS({
       if (v1 === v2) {
         return true;
       }
-      if (
-        graphTypes.isValue(v1) &&
-        graphTypes.isValue(v2) &&
-        v1["@value"] === v2["@value"] &&
-        v1["@type"] === v2["@type"] &&
-        v1["@language"] === v2["@language"] &&
-        v1["@index"] === v2["@index"]
-      ) {
+      if (graphTypes.isValue(v1) && graphTypes.isValue(v2) && v1["@value"] === v2["@value"] && v1["@type"] === v2["@type"] && v1["@language"] === v2["@language"] && v1["@index"] === v2["@index"]) {
         return true;
       }
-      if (
-        types.isObject(v1) &&
-        "@id" in v1 &&
-        types.isObject(v2) &&
-        "@id" in v2
-      ) {
+      if (types.isObject(v1) && "@id" in v1 && types.isObject(v2) && "@id" in v2) {
         return v1["@id"] === v2["@id"];
       }
       return false;
@@ -373,7 +308,7 @@ var require_util = __commonJS({
       }
       return element;
     }
-  },
+  }
 });
 
 // lib/constants.js
@@ -400,9 +335,9 @@ var require_constants = __commonJS({
       XSD_BOOLEAN: XSD + "boolean",
       XSD_DOUBLE: XSD + "double",
       XSD_INTEGER: XSD + "integer",
-      XSD_STRING: XSD + "string",
+      XSD_STRING: XSD + "string"
     };
-  },
+  }
 });
 
 // lib/RequestQueue.js
@@ -416,7 +351,7 @@ var require_RequestQueue = __commonJS({
       wrapLoader(loader) {
         const self = this;
         self._loader = loader;
-        return function () {
+        return function() {
           return self.add.apply(self, arguments);
         };
       }
@@ -433,7 +368,7 @@ var require_RequestQueue = __commonJS({
         }
       }
     };
-  },
+  }
 });
 
 // lib/url.js
@@ -445,9 +380,15 @@ var require_url = __commonJS({
     module.exports = api;
     api.parsers = {
       simple: {
-        keys: ["href", "scheme", "authority", "path", "query", "fragment"],
-        regex:
-          /^(?:([^:\/?#]+):)?(?:\/\/([^\/?#]*))?([^?#]*)(?:\?([^#]*))?(?:#(.*))?/,
+        keys: [
+          "href",
+          "scheme",
+          "authority",
+          "path",
+          "query",
+          "fragment"
+        ],
+        regex: /^(?:([^:\/?#]+):)?(?:\/\/([^\/?#]*))?([^?#]*)(?:\?([^#]*))?(?:#(.*))?/
       },
       full: {
         keys: [
@@ -464,11 +405,10 @@ var require_url = __commonJS({
           "directory",
           "file",
           "query",
-          "fragment",
+          "fragment"
         ],
-        regex:
-          /^(([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?(?:(((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
-      },
+        regex: /^(([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?(?:(((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/
+      }
     };
     api.parse = (str, parser) => {
       const parsed = {};
@@ -478,10 +418,7 @@ var require_url = __commonJS({
       while (i--) {
         parsed[o.keys[i]] = m[i] === void 0 ? null : m[i];
       }
-      if (
-        (parsed.scheme === "https" && parsed.port === "443") ||
-        (parsed.scheme === "http" && parsed.port === "80")
-      ) {
+      if (parsed.scheme === "https" && parsed.port === "443" || parsed.scheme === "http" && parsed.port === "80") {
         parsed.href = parsed.href.replace(":" + parsed.port, "");
         parsed.authority = parsed.authority.replace(":" + parsed.port, "");
         parsed.port = null;
@@ -501,7 +438,7 @@ var require_url = __commonJS({
       }
       const rel = api.parse(iri);
       const transform = {
-        protocol: base.protocol || "",
+        protocol: base.protocol || ""
       };
       if (rel.authority !== null) {
         transform.authority = rel.authority;
@@ -522,10 +459,7 @@ var require_url = __commonJS({
           } else {
             let path = base.path;
             path = path.substr(0, path.lastIndexOf("/") + 1);
-            if (
-              (path.length > 0 || base.authority) &&
-              path.substr(-1) !== "/"
-            ) {
+            if ((path.length > 0 || base.authority) && path.substr(-1) !== "/") {
               path += "/";
             }
             path += rel.path;
@@ -634,7 +568,7 @@ var require_url = __commonJS({
     var isAbsoluteRegex = /^([A-Za-z][A-Za-z0-9+-.]*|_):[^\s]*$/;
     api.isAbsolute = (v) => types.isString(v) && isAbsoluteRegex.test(v);
     api.isRelative = (v) => types.isString(v);
-  },
+  }
 });
 
 // lib/documentLoaders/xhr.js
@@ -647,51 +581,35 @@ var require_xhr = __commonJS({
     var RequestQueue = require_RequestQueue();
     var { prependBase } = require_url();
     var REGEX_LINK_HEADER = /(^|(\r\n))link:/i;
-    module.exports = ({ secure, headers = {}, xhr } = { headers: {} }) => {
+    module.exports = ({
+      secure,
+      headers = {},
+      xhr
+    } = { headers: {} }) => {
       headers = buildHeaders(headers);
       const queue = new RequestQueue();
       return queue.wrapLoader(loader);
       async function loader(url) {
         if (url.indexOf("http:") !== 0 && url.indexOf("https:") !== 0) {
-          throw new JsonLdError(
-            'URL could not be dereferenced; only "http" and "https" URLs are supported.',
-            "jsonld.InvalidUrl",
-            { code: "loading document failed", url }
-          );
+          throw new JsonLdError('URL could not be dereferenced; only "http" and "https" URLs are supported.', "jsonld.InvalidUrl", { code: "loading document failed", url });
         }
         if (secure && url.indexOf("https") !== 0) {
-          throw new JsonLdError(
-            `URL could not be dereferenced; secure mode is enabled and the URL's scheme is not "https".`,
-            "jsonld.InvalidUrl",
-            { code: "loading document failed", url }
-          );
+          throw new JsonLdError(`URL could not be dereferenced; secure mode is enabled and the URL's scheme is not "https".`, "jsonld.InvalidUrl", { code: "loading document failed", url });
         }
         let req;
         try {
           req = await _get(xhr, url, headers);
         } catch (e) {
-          throw new JsonLdError(
-            "URL could not be dereferenced, an error occurred.",
-            "jsonld.LoadDocumentError",
-            { code: "loading document failed", url, cause: e }
-          );
+          throw new JsonLdError("URL could not be dereferenced, an error occurred.", "jsonld.LoadDocumentError", { code: "loading document failed", url, cause: e });
         }
         if (req.status >= 400) {
-          throw new JsonLdError(
-            "URL could not be dereferenced: " + req.statusText,
-            "jsonld.LoadDocumentError",
-            {
-              code: "loading document failed",
-              url,
-              httpStatusCode: req.status,
-            }
-          );
+          throw new JsonLdError("URL could not be dereferenced: " + req.statusText, "jsonld.LoadDocumentError", {
+            code: "loading document failed",
+            url,
+            httpStatusCode: req.status
+          });
         }
-        let doc = {
-          contextUrl: null,
-          documentUrl: url,
-          document: req.response,
-        };
+        let doc = { contextUrl: null, documentUrl: url, document: req.response };
         let alternate = null;
         const contentType = req.getResponseHeader("Content-Type");
         let linkHeader;
@@ -702,21 +620,13 @@ var require_xhr = __commonJS({
           const linkHeaders = parseLinkHeader(linkHeader);
           const linkedContext = linkHeaders[LINK_HEADER_CONTEXT];
           if (Array.isArray(linkedContext)) {
-            throw new JsonLdError(
-              "URL could not be dereferenced, it has more than one associated HTTP Link Header.",
-              "jsonld.InvalidUrl",
-              { code: "multiple context link headers", url }
-            );
+            throw new JsonLdError("URL could not be dereferenced, it has more than one associated HTTP Link Header.", "jsonld.InvalidUrl", { code: "multiple context link headers", url });
           }
           if (linkedContext) {
             doc.contextUrl = linkedContext.target;
           }
           alternate = linkHeaders["alternate"];
-          if (
-            alternate &&
-            alternate.type == "application/ld+json" &&
-            !(contentType || "").match(/^application\/(\w*\+)?json$/)
-          ) {
+          if (alternate && alternate.type == "application/ld+json" && !(contentType || "").match(/^application\/(\w*\+)?json$/)) {
             doc = await loader(prependBase(url, alternate.target));
           }
         }
@@ -736,7 +646,7 @@ var require_xhr = __commonJS({
         req.send();
       });
     }
-  },
+  }
 });
 
 // lib/platform-browser.js
@@ -746,37 +656,37 @@ var require_platform_browser = __commonJS({
     var xhrLoader = require_xhr();
     var api = {};
     module.exports = api;
-    api.setupDocumentLoaders = function (jsonld) {
+    api.setupDocumentLoaders = function(jsonld) {
       if (typeof XMLHttpRequest !== "undefined") {
         jsonld.documentLoaders.xhr = xhrLoader;
         jsonld.useDocumentLoader("xhr");
       }
     };
-    api.setupGlobals = function (jsonld) {
+    api.setupGlobals = function(jsonld) {
       if (typeof globalThis.JsonLdProcessor === "undefined") {
         Object.defineProperty(globalThis, "JsonLdProcessor", {
           writable: true,
           enumerable: false,
           configurable: true,
-          value: jsonld.JsonLdProcessor,
+          value: jsonld.JsonLdProcessor
         });
       }
     };
-  },
+  }
 });
 
 // node_modules/yallist/iterator.js
 var require_iterator = __commonJS({
   "node_modules/yallist/iterator.js"(exports, module) {
     "use strict";
-    module.exports = function (Yallist) {
+    module.exports = function(Yallist) {
       Yallist.prototype[Symbol.iterator] = function* () {
         for (let walker = this.head; walker; walker = walker.next) {
           yield walker.value;
         }
       };
     };
-  },
+  }
 });
 
 // node_modules/yallist/yallist.js
@@ -795,7 +705,7 @@ var require_yallist = __commonJS({
       self.head = null;
       self.length = 0;
       if (list && typeof list.forEach === "function") {
-        list.forEach(function (item) {
+        list.forEach(function(item) {
           self.push(item);
         });
       } else if (arguments.length > 0) {
@@ -805,7 +715,7 @@ var require_yallist = __commonJS({
       }
       return self;
     }
-    Yallist.prototype.removeNode = function (node) {
+    Yallist.prototype.removeNode = function(node) {
       if (node.list !== this) {
         throw new Error("removing node which does not belong to this list");
       }
@@ -829,7 +739,7 @@ var require_yallist = __commonJS({
       node.list = null;
       return next;
     };
-    Yallist.prototype.unshiftNode = function (node) {
+    Yallist.prototype.unshiftNode = function(node) {
       if (node === this.head) {
         return;
       }
@@ -848,7 +758,7 @@ var require_yallist = __commonJS({
       }
       this.length++;
     };
-    Yallist.prototype.pushNode = function (node) {
+    Yallist.prototype.pushNode = function(node) {
       if (node === this.tail) {
         return;
       }
@@ -867,19 +777,19 @@ var require_yallist = __commonJS({
       }
       this.length++;
     };
-    Yallist.prototype.push = function () {
+    Yallist.prototype.push = function() {
       for (var i = 0, l = arguments.length; i < l; i++) {
         push(this, arguments[i]);
       }
       return this.length;
     };
-    Yallist.prototype.unshift = function () {
+    Yallist.prototype.unshift = function() {
       for (var i = 0, l = arguments.length; i < l; i++) {
         unshift(this, arguments[i]);
       }
       return this.length;
     };
-    Yallist.prototype.pop = function () {
+    Yallist.prototype.pop = function() {
       if (!this.tail) {
         return void 0;
       }
@@ -893,7 +803,7 @@ var require_yallist = __commonJS({
       this.length--;
       return res;
     };
-    Yallist.prototype.shift = function () {
+    Yallist.prototype.shift = function() {
       if (!this.head) {
         return void 0;
       }
@@ -907,21 +817,21 @@ var require_yallist = __commonJS({
       this.length--;
       return res;
     };
-    Yallist.prototype.forEach = function (fn, thisp) {
+    Yallist.prototype.forEach = function(fn, thisp) {
       thisp = thisp || this;
       for (var walker = this.head, i = 0; walker !== null; i++) {
         fn.call(thisp, walker.value, i, this);
         walker = walker.next;
       }
     };
-    Yallist.prototype.forEachReverse = function (fn, thisp) {
+    Yallist.prototype.forEachReverse = function(fn, thisp) {
       thisp = thisp || this;
       for (var walker = this.tail, i = this.length - 1; walker !== null; i--) {
         fn.call(thisp, walker.value, i, this);
         walker = walker.prev;
       }
     };
-    Yallist.prototype.get = function (n) {
+    Yallist.prototype.get = function(n) {
       for (var i = 0, walker = this.head; walker !== null && i < n; i++) {
         walker = walker.next;
       }
@@ -929,7 +839,7 @@ var require_yallist = __commonJS({
         return walker.value;
       }
     };
-    Yallist.prototype.getReverse = function (n) {
+    Yallist.prototype.getReverse = function(n) {
       for (var i = 0, walker = this.tail; walker !== null && i < n; i++) {
         walker = walker.prev;
       }
@@ -937,7 +847,7 @@ var require_yallist = __commonJS({
         return walker.value;
       }
     };
-    Yallist.prototype.map = function (fn, thisp) {
+    Yallist.prototype.map = function(fn, thisp) {
       thisp = thisp || this;
       var res = new Yallist();
       for (var walker = this.head; walker !== null; ) {
@@ -946,7 +856,7 @@ var require_yallist = __commonJS({
       }
       return res;
     };
-    Yallist.prototype.mapReverse = function (fn, thisp) {
+    Yallist.prototype.mapReverse = function(fn, thisp) {
       thisp = thisp || this;
       var res = new Yallist();
       for (var walker = this.tail; walker !== null; ) {
@@ -955,7 +865,7 @@ var require_yallist = __commonJS({
       }
       return res;
     };
-    Yallist.prototype.reduce = function (fn, initial) {
+    Yallist.prototype.reduce = function(fn, initial) {
       var acc;
       var walker = this.head;
       if (arguments.length > 1) {
@@ -972,7 +882,7 @@ var require_yallist = __commonJS({
       }
       return acc;
     };
-    Yallist.prototype.reduceReverse = function (fn, initial) {
+    Yallist.prototype.reduceReverse = function(fn, initial) {
       var acc;
       var walker = this.tail;
       if (arguments.length > 1) {
@@ -989,7 +899,7 @@ var require_yallist = __commonJS({
       }
       return acc;
     };
-    Yallist.prototype.toArray = function () {
+    Yallist.prototype.toArray = function() {
       var arr = new Array(this.length);
       for (var i = 0, walker = this.head; walker !== null; i++) {
         arr[i] = walker.value;
@@ -997,7 +907,7 @@ var require_yallist = __commonJS({
       }
       return arr;
     };
-    Yallist.prototype.toArrayReverse = function () {
+    Yallist.prototype.toArrayReverse = function() {
       var arr = new Array(this.length);
       for (var i = 0, walker = this.tail; walker !== null; i++) {
         arr[i] = walker.value;
@@ -1005,7 +915,7 @@ var require_yallist = __commonJS({
       }
       return arr;
     };
-    Yallist.prototype.slice = function (from, to) {
+    Yallist.prototype.slice = function(from, to) {
       to = to || this.length;
       if (to < 0) {
         to += this.length;
@@ -1032,7 +942,7 @@ var require_yallist = __commonJS({
       }
       return ret;
     };
-    Yallist.prototype.sliceReverse = function (from, to) {
+    Yallist.prototype.sliceReverse = function(from, to) {
       to = to || this.length;
       if (to < 0) {
         to += this.length;
@@ -1051,11 +961,7 @@ var require_yallist = __commonJS({
       if (to > this.length) {
         to = this.length;
       }
-      for (
-        var i = this.length, walker = this.tail;
-        walker !== null && i > to;
-        i--
-      ) {
+      for (var i = this.length, walker = this.tail; walker !== null && i > to; i--) {
         walker = walker.prev;
       }
       for (; walker !== null && i > from; i--, walker = walker.prev) {
@@ -1063,7 +969,7 @@ var require_yallist = __commonJS({
       }
       return ret;
     };
-    Yallist.prototype.splice = function (start, deleteCount, ...nodes) {
+    Yallist.prototype.splice = function(start, deleteCount, ...nodes) {
       if (start > this.length) {
         start = this.length - 1;
       }
@@ -1089,7 +995,7 @@ var require_yallist = __commonJS({
       }
       return ret;
     };
-    Yallist.prototype.reverse = function () {
+    Yallist.prototype.reverse = function() {
       var head = this.head;
       var tail = this.tail;
       for (var walker = head; walker !== null; walker = walker.prev) {
@@ -1102,10 +1008,7 @@ var require_yallist = __commonJS({
       return this;
     };
     function insert(self, node, value) {
-      var inserted =
-        node === self.head
-          ? new Node(value, null, node, self)
-          : new Node(value, node, node.next, self);
+      var inserted = node === self.head ? new Node(value, null, node, self) : new Node(value, node, node.next, self);
       if (inserted.next === null) {
         self.tail = inserted;
       }
@@ -1150,8 +1053,9 @@ var require_yallist = __commonJS({
     }
     try {
       require_iterator()(Yallist);
-    } catch (er) {}
-  },
+    } catch (er) {
+    }
+  }
 });
 
 // node_modules/lru-cache/index.js
@@ -1172,11 +1076,13 @@ var require_lru_cache = __commonJS({
     var naiveLength = () => 1;
     var LRUCache = class {
       constructor(options) {
-        if (typeof options === "number") options = { max: options };
-        if (!options) options = {};
+        if (typeof options === "number")
+          options = { max: options };
+        if (!options)
+          options = {};
         if (options.max && (typeof options.max !== "number" || options.max < 0))
           throw new TypeError("max must be a non-negative number");
-        const max = (this[MAX] = options.max || Infinity);
+        const max = this[MAX] = options.max || Infinity;
         const lc = options.length || naiveLength;
         this[LENGTH_CALCULATOR] = typeof lc !== "function" ? naiveLength : lc;
         this[ALLOW_STALE] = options.stale || false;
@@ -1213,7 +1119,8 @@ var require_lru_cache = __commonJS({
         return this[MAX_AGE];
       }
       set lengthCalculator(lC) {
-        if (typeof lC !== "function") lC = naiveLength;
+        if (typeof lC !== "function")
+          lC = naiveLength;
         if (lC !== this[LENGTH_CALCULATOR]) {
           this[LENGTH_CALCULATOR] = lC;
           this[LENGTH] = 0;
@@ -1264,17 +1171,11 @@ var require_lru_cache = __commonJS({
         this[LENGTH] = 0;
       }
       dump() {
-        return this[LRU_LIST].map((hit) =>
-          isStale(this, hit)
-            ? false
-            : {
-                k: hit.key,
-                v: hit.value,
-                e: hit.now + (hit.maxAge || 0),
-              }
-        )
-          .toArray()
-          .filter((h) => h);
+        return this[LRU_LIST].map((hit) => isStale(this, hit) ? false : {
+          k: hit.key,
+          v: hit.value,
+          e: hit.now + (hit.maxAge || 0)
+        }).toArray().filter((h) => h);
       }
       dumpLru() {
         return this[LRU_LIST];
@@ -1293,7 +1194,8 @@ var require_lru_cache = __commonJS({
           const node = this[CACHE].get(key);
           const item = node.value;
           if (this[DISPOSE]) {
-            if (!this[NO_DISPOSE_ON_SET]) this[DISPOSE](key, item.value);
+            if (!this[NO_DISPOSE_ON_SET])
+              this[DISPOSE](key, item.value);
           }
           item.now = now;
           item.maxAge = maxAge;
@@ -1306,7 +1208,8 @@ var require_lru_cache = __commonJS({
         }
         const hit = new Entry(key, value, len, now, maxAge);
         if (hit.length > this[MAX]) {
-          if (this[DISPOSE]) this[DISPOSE](key, value);
+          if (this[DISPOSE])
+            this[DISPOSE](key, value);
           return false;
         }
         this[LENGTH] += hit.length;
@@ -1316,7 +1219,8 @@ var require_lru_cache = __commonJS({
         return true;
       }
       has(key) {
-        if (!this[CACHE].has(key)) return false;
+        if (!this[CACHE].has(key))
+          return false;
         const hit = this[CACHE].get(key).value;
         return !isStale(this, hit);
       }
@@ -1328,7 +1232,8 @@ var require_lru_cache = __commonJS({
       }
       pop() {
         const node = this[LRU_LIST].tail;
-        if (!node) return null;
+        if (!node)
+          return null;
         del(this, node);
         return node.value;
       }
@@ -1341,7 +1246,8 @@ var require_lru_cache = __commonJS({
         for (let l = arr.length - 1; l >= 0; l--) {
           const hit = arr[l];
           const expiresAt = hit.e || 0;
-          if (expiresAt === 0) this.set(hit.k, hit.v);
+          if (expiresAt === 0)
+            this.set(hit.k, hit.v);
           else {
             const maxAge = expiresAt - now;
             if (maxAge > 0) {
@@ -1360,10 +1266,12 @@ var require_lru_cache = __commonJS({
         const hit = node.value;
         if (isStale(self, hit)) {
           del(self, node);
-          if (!self[ALLOW_STALE]) return void 0;
+          if (!self[ALLOW_STALE])
+            return void 0;
         } else {
           if (doUse) {
-            if (self[UPDATE_AGE_ON_GET]) node.value.now = Date.now();
+            if (self[UPDATE_AGE_ON_GET])
+              node.value.now = Date.now();
             self[LRU_LIST].unshiftNode(node);
           }
         }
@@ -1371,19 +1279,14 @@ var require_lru_cache = __commonJS({
       }
     };
     var isStale = (self, hit) => {
-      if (!hit || (!hit.maxAge && !self[MAX_AGE])) return false;
+      if (!hit || !hit.maxAge && !self[MAX_AGE])
+        return false;
       const diff = Date.now() - hit.now;
-      return hit.maxAge
-        ? diff > hit.maxAge
-        : self[MAX_AGE] && diff > self[MAX_AGE];
+      return hit.maxAge ? diff > hit.maxAge : self[MAX_AGE] && diff > self[MAX_AGE];
     };
     var trim = (self) => {
       if (self[LENGTH] > self[MAX]) {
-        for (
-          let walker = self[LRU_LIST].tail;
-          self[LENGTH] > self[MAX] && walker !== null;
-
-        ) {
+        for (let walker = self[LRU_LIST].tail; self[LENGTH] > self[MAX] && walker !== null; ) {
           const prev = walker.prev;
           del(self, walker);
           walker = prev;
@@ -1393,7 +1296,8 @@ var require_lru_cache = __commonJS({
     var del = (self, node) => {
       if (node) {
         const hit = node.value;
-        if (self[DISPOSE]) self[DISPOSE](hit.key, hit.value);
+        if (self[DISPOSE])
+          self[DISPOSE](hit.key, hit.value);
         self[LENGTH] -= hit.length;
         self[CACHE].delete(hit.key);
         self[LRU_LIST].removeNode(node);
@@ -1412,12 +1316,14 @@ var require_lru_cache = __commonJS({
       let hit = node.value;
       if (isStale(self, hit)) {
         del(self, node);
-        if (!self[ALLOW_STALE]) hit = void 0;
+        if (!self[ALLOW_STALE])
+          hit = void 0;
       }
-      if (hit) fn.call(thisp, hit.value, hit.key, self);
+      if (hit)
+        fn.call(thisp, hit.value, hit.key, self);
     };
     module.exports = LRUCache;
-  },
+  }
 });
 
 // lib/ResolvedContext.js
@@ -1438,7 +1344,7 @@ var require_ResolvedContext = __commonJS({
         this.cache.set(activeCtx, processedCtx);
       }
     };
-  },
+  }
 });
 
 // lib/ContextResolver.js
@@ -1448,9 +1354,11 @@ var require_ContextResolver = __commonJS({
     var {
       isArray: _isArray,
       isObject: _isObject,
-      isString: _isString,
+      isString: _isString
     } = require_types();
-    var { asArray: _asArray } = require_util();
+    var {
+      asArray: _asArray
+    } = require_util();
     var { prependBase } = require_url();
     var JsonLdError = require_JsonLdError();
     var ResolvedContext = require_ResolvedContext();
@@ -1465,7 +1373,7 @@ var require_ContextResolver = __commonJS({
         context,
         documentLoader,
         base,
-        cycles = /* @__PURE__ */ new Set(),
+        cycles = /* @__PURE__ */ new Set()
       }) {
         if (context && _isObject(context) && context["@context"]) {
           context = context["@context"];
@@ -1476,13 +1384,7 @@ var require_ContextResolver = __commonJS({
           if (_isString(ctx)) {
             let resolved2 = this._get(ctx);
             if (!resolved2) {
-              resolved2 = await this._resolveRemoteContext({
-                activeCtx,
-                url: ctx,
-                documentLoader,
-                base,
-                cycles,
-              });
+              resolved2 = await this._resolveRemoteContext({ activeCtx, url: ctx, documentLoader, base, cycles });
             }
             if (_isArray(resolved2)) {
               allResolved.push(...resolved2);
@@ -1533,58 +1435,27 @@ var require_ContextResolver = __commonJS({
         }
         return resolved;
       }
-      async _resolveRemoteContext({
-        activeCtx,
-        url,
-        documentLoader,
-        base,
-        cycles,
-      }) {
+      async _resolveRemoteContext({ activeCtx, url, documentLoader, base, cycles }) {
         url = prependBase(base, url);
-        const { context, remoteDoc } = await this._fetchContext({
-          activeCtx,
-          url,
-          documentLoader,
-          cycles,
-        });
+        const { context, remoteDoc } = await this._fetchContext({ activeCtx, url, documentLoader, cycles });
         base = remoteDoc.documentUrl || url;
         _resolveContextUrls({ context, base });
-        const resolved = await this.resolve({
-          activeCtx,
-          context,
-          documentLoader,
-          base,
-          cycles,
-        });
+        const resolved = await this.resolve({ activeCtx, context, documentLoader, base, cycles });
         this._cacheResolvedContext({ key: url, resolved, tag: remoteDoc.tag });
         return resolved;
       }
       async _fetchContext({ activeCtx, url, documentLoader, cycles }) {
         if (cycles.size > MAX_CONTEXT_URLS) {
-          throw new JsonLdError(
-            "Maximum number of @context URLs exceeded.",
-            "jsonld.ContextUrlError",
-            {
-              code:
-                activeCtx.processingMode === "json-ld-1.0"
-                  ? "loading remote context failed"
-                  : "context overflow",
-              max: MAX_CONTEXT_URLS,
-            }
-          );
+          throw new JsonLdError("Maximum number of @context URLs exceeded.", "jsonld.ContextUrlError", {
+            code: activeCtx.processingMode === "json-ld-1.0" ? "loading remote context failed" : "context overflow",
+            max: MAX_CONTEXT_URLS
+          });
         }
         if (cycles.has(url)) {
-          throw new JsonLdError(
-            "Cyclical @context URLs detected.",
-            "jsonld.ContextUrlError",
-            {
-              code:
-                activeCtx.processingMode === "json-ld-1.0"
-                  ? "recursive context inclusion"
-                  : "context overflow",
-              url,
-            }
-          );
+          throw new JsonLdError("Cyclical @context URLs detected.", "jsonld.ContextUrlError", {
+            code: activeCtx.processingMode === "json-ld-1.0" ? "recursive context inclusion" : "context overflow",
+            url
+          });
         }
         cycles.add(url);
         let context;
@@ -1596,18 +1467,10 @@ var require_ContextResolver = __commonJS({
             context = JSON.parse(context);
           }
         } catch (e) {
-          throw new JsonLdError(
-            "Dereferencing a URL did not result in a valid JSON-LD object. Possible causes are an inaccessible URL perhaps due to a same-origin policy (ensure the server uses CORS if you are using client-side JavaScript), too many redirects, a non-JSON response, or more than one HTTP Link Header was provided for a remote context.",
-            "jsonld.InvalidUrl",
-            { code: "loading remote context failed", url, cause: e }
-          );
+          throw new JsonLdError("Dereferencing a URL did not result in a valid JSON-LD object. Possible causes are an inaccessible URL perhaps due to a same-origin policy (ensure the server uses CORS if you are using client-side JavaScript), too many redirects, a non-JSON response, or more than one HTTP Link Header was provided for a remote context.", "jsonld.InvalidUrl", { code: "loading remote context failed", url, cause: e });
         }
         if (!_isObject(context)) {
-          throw new JsonLdError(
-            "Dereferencing a URL did not result in a JSON object. The response was valid JSON, but it was not a JSON object.",
-            "jsonld.InvalidUrl",
-            { code: "invalid remote context", url }
-          );
+          throw new JsonLdError("Dereferencing a URL did not result in a JSON object. The response was valid JSON, but it was not a JSON object.", "jsonld.InvalidUrl", { code: "invalid remote context", url });
         }
         if (!("@context" in context)) {
           context = { "@context": {} };
@@ -1624,14 +1487,10 @@ var require_ContextResolver = __commonJS({
       }
     };
     function _throwInvalidLocalContext(ctx) {
-      throw new JsonLdError(
-        "Invalid JSON-LD syntax; @context must be an object.",
-        "jsonld.SyntaxError",
-        {
-          code: "invalid local context",
-          context: ctx,
-        }
-      );
+      throw new JsonLdError("Invalid JSON-LD syntax; @context must be an object.", "jsonld.SyntaxError", {
+        code: "invalid local context",
+        context: ctx
+      });
     }
     function _resolveContextUrls({ context, base }) {
       if (!context) {
@@ -1662,7 +1521,7 @@ var require_ContextResolver = __commonJS({
         _resolveContextUrls({ context: ctx[term], base });
       }
     }
-  },
+  }
 });
 
 // lib/context.js
@@ -1675,15 +1534,17 @@ var require_context = __commonJS({
       isArray: _isArray,
       isObject: _isObject,
       isString: _isString,
-      isUndefined: _isUndefined,
+      isUndefined: _isUndefined
     } = require_types();
     var {
       isAbsolute: _isAbsoluteIri,
       isRelative: _isRelativeIri,
-      prependBase,
+      prependBase
     } = require_url();
-    var { asArray: _asArray, compareShortestLeast: _compareShortestLeast } =
-      require_util();
+    var {
+      asArray: _asArray,
+      compareShortestLeast: _compareShortestLeast
+    } = require_util();
     var INITIAL_CONTEXT_CACHE = /* @__PURE__ */ new Map();
     var INITIAL_CONTEXT_CACHE_MAX_SIZE = 1e4;
     var KEYWORD_PATTERN = /^@[a-zA-Z]+$/;
@@ -1695,13 +1556,9 @@ var require_context = __commonJS({
       options,
       propagate = true,
       overrideProtected = false,
-      cycles = /* @__PURE__ */ new Set(),
+      cycles = /* @__PURE__ */ new Set()
     }) => {
-      if (
-        _isObject(localCtx) &&
-        "@context" in localCtx &&
-        _isArray(localCtx["@context"])
-      ) {
+      if (_isObject(localCtx) && "@context" in localCtx && _isArray(localCtx["@context"])) {
         localCtx = localCtx["@context"];
       }
       const ctxs = _asArray(localCtx);
@@ -1712,12 +1569,9 @@ var require_context = __commonJS({
         activeCtx,
         context: localCtx,
         documentLoader: options.documentLoader,
-        base: options.base,
+        base: options.base
       });
-      if (
-        _isObject(resolved[0].document) &&
-        typeof resolved[0].document["@propagate"] === "boolean"
-      ) {
+      if (_isObject(resolved[0].document) && typeof resolved[0].document["@propagate"] === "boolean") {
         propagate = resolved[0].document["@propagate"];
       }
       let rval = activeCtx;
@@ -1729,17 +1583,10 @@ var require_context = __commonJS({
         let { document: ctx } = resolvedContext;
         activeCtx = rval;
         if (ctx === null) {
-          if (
-            !overrideProtected &&
-            Object.keys(activeCtx.protected).length !== 0
-          ) {
-            const protectedMode = (options && options.protectedMode) || "error";
+          if (!overrideProtected && Object.keys(activeCtx.protected).length !== 0) {
+            const protectedMode = options && options.protectedMode || "error";
             if (protectedMode === "error") {
-              throw new JsonLdError(
-                "Tried to nullify a context with protected terms outside of a term definition.",
-                "jsonld.SyntaxError",
-                { code: "invalid context nullification" }
-              );
+              throw new JsonLdError("Tried to nullify a context with protected terms outside of a term definition.", "jsonld.SyntaxError", { code: "invalid context nullification" });
             } else if (protectedMode === "warn") {
               console.warn("WARNING: invalid context nullification");
               const processed2 = resolvedContext.getProcessed(activeCtx);
@@ -1749,28 +1596,16 @@ var require_context = __commonJS({
               }
               const oldActiveCtx = activeCtx;
               rval = activeCtx = api.getInitialContext(options).clone();
-              for (const [term, _protected] of Object.entries(
-                oldActiveCtx.protected
-              )) {
+              for (const [term, _protected] of Object.entries(oldActiveCtx.protected)) {
                 if (_protected) {
-                  activeCtx.mappings[term] = util.clone(
-                    oldActiveCtx.mappings[term]
-                  );
+                  activeCtx.mappings[term] = util.clone(oldActiveCtx.mappings[term]);
                 }
               }
               activeCtx.protected = util.clone(oldActiveCtx.protected);
               resolvedContext.setProcessed(oldActiveCtx, rval);
               continue;
             }
-            throw new JsonLdError(
-              "Invalid protectedMode.",
-              "jsonld.SyntaxError",
-              {
-                code: "invalid protected mode",
-                context: localCtx,
-                protectedMode,
-              }
-            );
+            throw new JsonLdError("Invalid protectedMode.", "jsonld.SyntaxError", { code: "invalid protected mode", context: localCtx, protectedMode });
           }
           rval = activeCtx = api.getInitialContext(options).clone();
           continue;
@@ -1784,34 +1619,16 @@ var require_context = __commonJS({
           ctx = ctx["@context"];
         }
         if (!_isObject(ctx)) {
-          throw new JsonLdError(
-            "Invalid JSON-LD syntax; @context must be an object.",
-            "jsonld.SyntaxError",
-            { code: "invalid local context", context: ctx }
-          );
+          throw new JsonLdError("Invalid JSON-LD syntax; @context must be an object.", "jsonld.SyntaxError", { code: "invalid local context", context: ctx });
         }
         rval = rval.clone();
         const defined = /* @__PURE__ */ new Map();
         if ("@version" in ctx) {
           if (ctx["@version"] !== 1.1) {
-            throw new JsonLdError(
-              "Unsupported JSON-LD version: " + ctx["@version"],
-              "jsonld.UnsupportedVersion",
-              { code: "invalid @version value", context: ctx }
-            );
+            throw new JsonLdError("Unsupported JSON-LD version: " + ctx["@version"], "jsonld.UnsupportedVersion", { code: "invalid @version value", context: ctx });
           }
-          if (
-            activeCtx.processingMode &&
-            activeCtx.processingMode === "json-ld-1.0"
-          ) {
-            throw new JsonLdError(
-              "@version: " +
-                ctx["@version"] +
-                " not compatible with " +
-                activeCtx.processingMode,
-              "jsonld.ProcessingModeConflict",
-              { code: "processing mode conflict", context: ctx }
-            );
+          if (activeCtx.processingMode && activeCtx.processingMode === "json-ld-1.0") {
+            throw new JsonLdError("@version: " + ctx["@version"] + " not compatible with " + activeCtx.processingMode, "jsonld.ProcessingModeConflict", { code: "processing mode conflict", context: ctx });
           }
           rval.processingMode = "json-ld-1.1";
           rval["@version"] = ctx["@version"];
@@ -1824,11 +1641,7 @@ var require_context = __commonJS({
           } else if (_isRelativeIri(base)) {
             base = prependBase(rval["@base"], base);
           } else {
-            throw new JsonLdError(
-              'Invalid JSON-LD syntax; the value of "@base" in a @context must be an absolute IRI, a relative IRI, or null.',
-              "jsonld.SyntaxError",
-              { code: "invalid base IRI", context: ctx }
-            );
+            throw new JsonLdError('Invalid JSON-LD syntax; the value of "@base" in a @context must be an absolute IRI, a relative IRI, or null.', "jsonld.SyntaxError", { code: "invalid base IRI", context: ctx });
           }
           rval["@base"] = base;
           defined.set("@base", true);
@@ -1838,26 +1651,11 @@ var require_context = __commonJS({
           if (value === null) {
             delete rval["@vocab"];
           } else if (!_isString(value)) {
-            throw new JsonLdError(
-              'Invalid JSON-LD syntax; the value of "@vocab" in a @context must be a string or null.',
-              "jsonld.SyntaxError",
-              { code: "invalid vocab mapping", context: ctx }
-            );
+            throw new JsonLdError('Invalid JSON-LD syntax; the value of "@vocab" in a @context must be a string or null.', "jsonld.SyntaxError", { code: "invalid vocab mapping", context: ctx });
           } else if (!_isAbsoluteIri(value) && api.processingMode(rval, 1)) {
-            throw new JsonLdError(
-              'Invalid JSON-LD syntax; the value of "@vocab" in a @context must be an absolute IRI.',
-              "jsonld.SyntaxError",
-              { code: "invalid vocab mapping", context: ctx }
-            );
+            throw new JsonLdError('Invalid JSON-LD syntax; the value of "@vocab" in a @context must be an absolute IRI.', "jsonld.SyntaxError", { code: "invalid vocab mapping", context: ctx });
           } else {
-            rval["@vocab"] = _expandIri(
-              rval,
-              value,
-              { vocab: true, base: true },
-              void 0,
-              void 0,
-              options
-            );
+            rval["@vocab"] = _expandIri(rval, value, { vocab: true, base: true }, void 0, void 0, options);
           }
           defined.set("@vocab", true);
         }
@@ -1866,11 +1664,7 @@ var require_context = __commonJS({
           if (value === null) {
             delete rval["@language"];
           } else if (!_isString(value)) {
-            throw new JsonLdError(
-              'Invalid JSON-LD syntax; the value of "@language" in a @context must be a string or null.',
-              "jsonld.SyntaxError",
-              { code: "invalid default language", context: ctx }
-            );
+            throw new JsonLdError('Invalid JSON-LD syntax; the value of "@language" in a @context must be a string or null.', "jsonld.SyntaxError", { code: "invalid default language", context: ctx });
           } else {
             rval["@language"] = value.toLowerCase();
           }
@@ -1879,21 +1673,12 @@ var require_context = __commonJS({
         if ("@direction" in ctx) {
           const value = ctx["@direction"];
           if (activeCtx.processingMode === "json-ld-1.0") {
-            throw new JsonLdError(
-              "Invalid JSON-LD syntax; @direction not compatible with " +
-                activeCtx.processingMode,
-              "jsonld.SyntaxError",
-              { code: "invalid context member", context: ctx }
-            );
+            throw new JsonLdError("Invalid JSON-LD syntax; @direction not compatible with " + activeCtx.processingMode, "jsonld.SyntaxError", { code: "invalid context member", context: ctx });
           }
           if (value === null) {
             delete rval["@direction"];
           } else if (value !== "ltr" && value !== "rtl") {
-            throw new JsonLdError(
-              'Invalid JSON-LD syntax; the value of "@direction" in a @context must be null, "ltr", or "rtl".',
-              "jsonld.SyntaxError",
-              { code: "invalid base direction", context: ctx }
-            );
+            throw new JsonLdError('Invalid JSON-LD syntax; the value of "@direction" in a @context must be null, "ltr", or "rtl".', "jsonld.SyntaxError", { code: "invalid base direction", context: ctx });
           } else {
             rval["@direction"] = value;
           }
@@ -1902,51 +1687,29 @@ var require_context = __commonJS({
         if ("@propagate" in ctx) {
           const value = ctx["@propagate"];
           if (activeCtx.processingMode === "json-ld-1.0") {
-            throw new JsonLdError(
-              "Invalid JSON-LD syntax; @propagate not compatible with " +
-                activeCtx.processingMode,
-              "jsonld.SyntaxError",
-              { code: "invalid context entry", context: ctx }
-            );
+            throw new JsonLdError("Invalid JSON-LD syntax; @propagate not compatible with " + activeCtx.processingMode, "jsonld.SyntaxError", { code: "invalid context entry", context: ctx });
           }
           if (typeof value !== "boolean") {
-            throw new JsonLdError(
-              "Invalid JSON-LD syntax; @propagate value must be a boolean.",
-              "jsonld.SyntaxError",
-              { code: "invalid @propagate value", context: localCtx }
-            );
+            throw new JsonLdError("Invalid JSON-LD syntax; @propagate value must be a boolean.", "jsonld.SyntaxError", { code: "invalid @propagate value", context: localCtx });
           }
           defined.set("@propagate", true);
         }
         if ("@import" in ctx) {
           const value = ctx["@import"];
           if (activeCtx.processingMode === "json-ld-1.0") {
-            throw new JsonLdError(
-              "Invalid JSON-LD syntax; @import not compatible with " +
-                activeCtx.processingMode,
-              "jsonld.SyntaxError",
-              { code: "invalid context entry", context: ctx }
-            );
+            throw new JsonLdError("Invalid JSON-LD syntax; @import not compatible with " + activeCtx.processingMode, "jsonld.SyntaxError", { code: "invalid context entry", context: ctx });
           }
           if (!_isString(value)) {
-            throw new JsonLdError(
-              "Invalid JSON-LD syntax; @import must be a string.",
-              "jsonld.SyntaxError",
-              { code: "invalid @import value", context: localCtx }
-            );
+            throw new JsonLdError("Invalid JSON-LD syntax; @import must be a string.", "jsonld.SyntaxError", { code: "invalid @import value", context: localCtx });
           }
           const resolvedImport = await options.contextResolver.resolve({
             activeCtx,
             context: value,
             documentLoader: options.documentLoader,
-            base: options.base,
+            base: options.base
           });
           if (resolvedImport.length !== 1) {
-            throw new JsonLdError(
-              "Invalid JSON-LD syntax; @import must reference a single context.",
-              "jsonld.SyntaxError",
-              { code: "invalid remote context", context: localCtx }
-            );
+            throw new JsonLdError("Invalid JSON-LD syntax; @import must reference a single context.", "jsonld.SyntaxError", { code: "invalid remote context", context: localCtx });
           }
           const processedImport = resolvedImport[0].getProcessed(activeCtx);
           if (processedImport) {
@@ -1954,11 +1717,7 @@ var require_context = __commonJS({
           } else {
             const importCtx = resolvedImport[0].document;
             if ("@import" in importCtx) {
-              throw new JsonLdError(
-                "Invalid JSON-LD syntax: imported context must not include @import.",
-                "jsonld.SyntaxError",
-                { code: "invalid context entry", context: localCtx }
-              );
+              throw new JsonLdError("Invalid JSON-LD syntax: imported context must not include @import.", "jsonld.SyntaxError", { code: "invalid context entry", context: localCtx });
             }
             for (const key in importCtx) {
               if (!ctx.hasOwnProperty(key)) {
@@ -1977,7 +1736,7 @@ var require_context = __commonJS({
             term: key,
             defined,
             options,
-            overrideProtected,
+            overrideProtected
           });
           if (_isObject(ctx[key]) && "@context" in ctx[key]) {
             const keyCtx = ctx[key]["@context"];
@@ -1997,18 +1756,14 @@ var require_context = __commonJS({
                   localCtx: ctx[key]["@context"],
                   overrideProtected: true,
                   options,
-                  cycles,
+                  cycles
                 });
               } catch (e) {
-                throw new JsonLdError(
-                  "Invalid JSON-LD syntax; invalid scoped context.",
-                  "jsonld.SyntaxError",
-                  {
-                    code: "invalid scoped context",
-                    context: ctx[key]["@context"],
-                    term: key,
-                  }
-                );
+                throw new JsonLdError("Invalid JSON-LD syntax; invalid scoped context.", "jsonld.SyntaxError", {
+                  code: "invalid scoped context",
+                  context: ctx[key]["@context"],
+                  term: key
+                });
               }
             }
           }
@@ -2023,56 +1778,32 @@ var require_context = __commonJS({
       term,
       defined,
       options,
-      overrideProtected = false,
+      overrideProtected = false
     }) => {
       if (defined.has(term)) {
         if (defined.get(term)) {
           return;
         }
-        throw new JsonLdError(
-          "Cyclical context definition detected.",
-          "jsonld.CyclicalContext",
-          { code: "cyclic IRI mapping", context: localCtx, term }
-        );
+        throw new JsonLdError("Cyclical context definition detected.", "jsonld.CyclicalContext", { code: "cyclic IRI mapping", context: localCtx, term });
       }
       defined.set(term, false);
       let value;
       if (localCtx.hasOwnProperty(term)) {
         value = localCtx[term];
       }
-      if (
-        term === "@type" &&
-        _isObject(value) &&
-        (value["@container"] || "@set") === "@set" &&
-        api.processingMode(activeCtx, 1.1)
-      ) {
+      if (term === "@type" && _isObject(value) && (value["@container"] || "@set") === "@set" && api.processingMode(activeCtx, 1.1)) {
         const validKeys2 = ["@container", "@id", "@protected"];
         const keys = Object.keys(value);
         if (keys.length === 0 || keys.some((k) => !validKeys2.includes(k))) {
-          throw new JsonLdError(
-            "Invalid JSON-LD syntax; keywords cannot be overridden.",
-            "jsonld.SyntaxError",
-            { code: "keyword redefinition", context: localCtx, term }
-          );
+          throw new JsonLdError("Invalid JSON-LD syntax; keywords cannot be overridden.", "jsonld.SyntaxError", { code: "keyword redefinition", context: localCtx, term });
         }
       } else if (api.isKeyword(term)) {
-        throw new JsonLdError(
-          "Invalid JSON-LD syntax; keywords cannot be overridden.",
-          "jsonld.SyntaxError",
-          { code: "keyword redefinition", context: localCtx, term }
-        );
+        throw new JsonLdError("Invalid JSON-LD syntax; keywords cannot be overridden.", "jsonld.SyntaxError", { code: "keyword redefinition", context: localCtx, term });
       } else if (term.match(KEYWORD_PATTERN)) {
-        console.warn(
-          'WARNING: terms beginning with "@" are reserved for future use and ignored',
-          { term }
-        );
+        console.warn('WARNING: terms beginning with "@" are reserved for future use and ignored', { term });
         return;
       } else if (term === "") {
-        throw new JsonLdError(
-          "Invalid JSON-LD syntax; a term cannot be an empty string.",
-          "jsonld.SyntaxError",
-          { code: "invalid term definition", context: localCtx }
-        );
+        throw new JsonLdError("Invalid JSON-LD syntax; a term cannot be an empty string.", "jsonld.SyntaxError", { code: "invalid term definition", context: localCtx });
       }
       const previousMapping = activeCtx.mappings.get(term);
       if (activeCtx.mappings.has(term)) {
@@ -2084,65 +1815,35 @@ var require_context = __commonJS({
         value = { "@id": value };
       }
       if (!_isObject(value)) {
-        throw new JsonLdError(
-          "Invalid JSON-LD syntax; @context term values must be strings or objects.",
-          "jsonld.SyntaxError",
-          { code: "invalid term definition", context: localCtx }
-        );
+        throw new JsonLdError("Invalid JSON-LD syntax; @context term values must be strings or objects.", "jsonld.SyntaxError", { code: "invalid term definition", context: localCtx });
       }
       const mapping = {};
       activeCtx.mappings.set(term, mapping);
       mapping.reverse = false;
       const validKeys = ["@container", "@id", "@language", "@reverse", "@type"];
       if (api.processingMode(activeCtx, 1.1)) {
-        validKeys.push(
-          "@context",
-          "@direction",
-          "@index",
-          "@nest",
-          "@prefix",
-          "@protected"
-        );
+        validKeys.push("@context", "@direction", "@index", "@nest", "@prefix", "@protected");
       }
       for (const kw in value) {
         if (!validKeys.includes(kw)) {
-          throw new JsonLdError(
-            "Invalid JSON-LD syntax; a term definition must not contain " + kw,
-            "jsonld.SyntaxError",
-            { code: "invalid term definition", context: localCtx }
-          );
+          throw new JsonLdError("Invalid JSON-LD syntax; a term definition must not contain " + kw, "jsonld.SyntaxError", { code: "invalid term definition", context: localCtx });
         }
       }
       const colon = term.indexOf(":");
       mapping._termHasColon = colon > 0;
       if ("@reverse" in value) {
         if ("@id" in value) {
-          throw new JsonLdError(
-            "Invalid JSON-LD syntax; a @reverse term definition must not contain @id.",
-            "jsonld.SyntaxError",
-            { code: "invalid reverse property", context: localCtx }
-          );
+          throw new JsonLdError("Invalid JSON-LD syntax; a @reverse term definition must not contain @id.", "jsonld.SyntaxError", { code: "invalid reverse property", context: localCtx });
         }
         if ("@nest" in value) {
-          throw new JsonLdError(
-            "Invalid JSON-LD syntax; a @reverse term definition must not contain @nest.",
-            "jsonld.SyntaxError",
-            { code: "invalid reverse property", context: localCtx }
-          );
+          throw new JsonLdError("Invalid JSON-LD syntax; a @reverse term definition must not contain @nest.", "jsonld.SyntaxError", { code: "invalid reverse property", context: localCtx });
         }
         const reverse = value["@reverse"];
         if (!_isString(reverse)) {
-          throw new JsonLdError(
-            "Invalid JSON-LD syntax; a @context @reverse value must be a string.",
-            "jsonld.SyntaxError",
-            { code: "invalid IRI mapping", context: localCtx }
-          );
+          throw new JsonLdError("Invalid JSON-LD syntax; a @context @reverse value must be a string.", "jsonld.SyntaxError", { code: "invalid IRI mapping", context: localCtx });
         }
         if (!api.isKeyword(reverse) && reverse.match(KEYWORD_PATTERN)) {
-          console.warn(
-            'WARNING: values beginning with "@" are reserved for future use and ignored',
-            { reverse }
-          );
+          console.warn('WARNING: values beginning with "@" are reserved for future use and ignored', { reverse });
           if (previousMapping) {
             activeCtx.mappings.set(term, previousMapping);
           } else {
@@ -2150,39 +1851,21 @@ var require_context = __commonJS({
           }
           return;
         }
-        const id2 = _expandIri(
-          activeCtx,
-          reverse,
-          { vocab: true, base: false },
-          localCtx,
-          defined,
-          options
-        );
+        const id2 = _expandIri(activeCtx, reverse, { vocab: true, base: false }, localCtx, defined, options);
         if (!_isAbsoluteIri(id2)) {
-          throw new JsonLdError(
-            "Invalid JSON-LD syntax; a @context @reverse value must be an absolute IRI or a blank node identifier.",
-            "jsonld.SyntaxError",
-            { code: "invalid IRI mapping", context: localCtx }
-          );
+          throw new JsonLdError("Invalid JSON-LD syntax; a @context @reverse value must be an absolute IRI or a blank node identifier.", "jsonld.SyntaxError", { code: "invalid IRI mapping", context: localCtx });
         }
         mapping["@id"] = id2;
         mapping.reverse = true;
       } else if ("@id" in value) {
         let id2 = value["@id"];
         if (id2 && !_isString(id2)) {
-          throw new JsonLdError(
-            "Invalid JSON-LD syntax; a @context @id value must be an array of strings or a string.",
-            "jsonld.SyntaxError",
-            { code: "invalid IRI mapping", context: localCtx }
-          );
+          throw new JsonLdError("Invalid JSON-LD syntax; a @context @id value must be an array of strings or a string.", "jsonld.SyntaxError", { code: "invalid IRI mapping", context: localCtx });
         }
         if (id2 === null) {
           mapping["@id"] = null;
         } else if (!api.isKeyword(id2) && id2.match(KEYWORD_PATTERN)) {
-          console.warn(
-            'WARNING: values beginning with "@" are reserved for future use and ignored',
-            { id: id2 }
-          );
+          console.warn('WARNING: values beginning with "@" are reserved for future use and ignored', { id: id2 });
           if (previousMapping) {
             activeCtx.mappings.set(term, previousMapping);
           } else {
@@ -2190,42 +1873,19 @@ var require_context = __commonJS({
           }
           return;
         } else if (id2 !== term) {
-          id2 = _expandIri(
-            activeCtx,
-            id2,
-            { vocab: true, base: false },
-            localCtx,
-            defined,
-            options
-          );
+          id2 = _expandIri(activeCtx, id2, { vocab: true, base: false }, localCtx, defined, options);
           if (!_isAbsoluteIri(id2) && !api.isKeyword(id2)) {
-            throw new JsonLdError(
-              "Invalid JSON-LD syntax; a @context @id value must be an absolute IRI, a blank node identifier, or a keyword.",
-              "jsonld.SyntaxError",
-              { code: "invalid IRI mapping", context: localCtx }
-            );
+            throw new JsonLdError("Invalid JSON-LD syntax; a @context @id value must be an absolute IRI, a blank node identifier, or a keyword.", "jsonld.SyntaxError", { code: "invalid IRI mapping", context: localCtx });
           }
           if (term.match(/(?::[^:])|\//)) {
             const termDefined = new Map(defined).set(term, true);
-            const termIri = _expandIri(
-              activeCtx,
-              term,
-              { vocab: true, base: false },
-              localCtx,
-              termDefined,
-              options
-            );
+            const termIri = _expandIri(activeCtx, term, { vocab: true, base: false }, localCtx, termDefined, options);
             if (termIri !== id2) {
-              throw new JsonLdError(
-                "Invalid JSON-LD syntax; term in form of IRI must expand to definition.",
-                "jsonld.SyntaxError",
-                { code: "invalid IRI mapping", context: localCtx }
-              );
+              throw new JsonLdError("Invalid JSON-LD syntax; term in form of IRI must expand to definition.", "jsonld.SyntaxError", { code: "invalid IRI mapping", context: localCtx });
             }
           }
           mapping["@id"] = id2;
-          mapping._prefix =
-            simpleTerm && !mapping._termHasColon && id2.match(/[:\/\?#\[\]@]$/);
+          mapping._prefix = simpleTerm && !mapping._termHasColon && id2.match(/[:\/\?#\[\]@]$/);
         }
       }
       if (!("@id" in mapping)) {
@@ -2237,7 +1897,7 @@ var require_context = __commonJS({
               localCtx,
               term: prefix,
               defined,
-              options,
+              options
             });
           }
           if (activeCtx.mappings.has(prefix)) {
@@ -2250,19 +1910,12 @@ var require_context = __commonJS({
           mapping["@id"] = term;
         } else {
           if (!("@vocab" in activeCtx)) {
-            throw new JsonLdError(
-              "Invalid JSON-LD syntax; @context terms must define an @id.",
-              "jsonld.SyntaxError",
-              { code: "invalid IRI mapping", context: localCtx, term }
-            );
+            throw new JsonLdError("Invalid JSON-LD syntax; @context terms must define an @id.", "jsonld.SyntaxError", { code: "invalid IRI mapping", context: localCtx, term });
           }
           mapping["@id"] = activeCtx["@vocab"] + term;
         }
       }
-      if (
-        value["@protected"] === true ||
-        (defined.get("@protected") === true && value["@protected"] !== false)
-      ) {
+      if (value["@protected"] === true || defined.get("@protected") === true && value["@protected"] !== false) {
         activeCtx.protected[term] = true;
         mapping.protected = true;
       }
@@ -2270,50 +1923,25 @@ var require_context = __commonJS({
       if ("@type" in value) {
         let type = value["@type"];
         if (!_isString(type)) {
-          throw new JsonLdError(
-            "Invalid JSON-LD syntax; an @context @type value must be a string.",
-            "jsonld.SyntaxError",
-            { code: "invalid type mapping", context: localCtx }
-          );
+          throw new JsonLdError("Invalid JSON-LD syntax; an @context @type value must be a string.", "jsonld.SyntaxError", { code: "invalid type mapping", context: localCtx });
         }
         if (type === "@json" || type === "@none") {
           if (api.processingMode(activeCtx, 1)) {
-            throw new JsonLdError(
-              `Invalid JSON-LD syntax; an @context @type value must not be "${type}" in JSON-LD 1.0 mode.`,
-              "jsonld.SyntaxError",
-              { code: "invalid type mapping", context: localCtx }
-            );
+            throw new JsonLdError(`Invalid JSON-LD syntax; an @context @type value must not be "${type}" in JSON-LD 1.0 mode.`, "jsonld.SyntaxError", { code: "invalid type mapping", context: localCtx });
           }
         } else if (type !== "@id" && type !== "@vocab") {
-          type = _expandIri(
-            activeCtx,
-            type,
-            { vocab: true, base: false },
-            localCtx,
-            defined,
-            options
-          );
+          type = _expandIri(activeCtx, type, { vocab: true, base: false }, localCtx, defined, options);
           if (!_isAbsoluteIri(type)) {
-            throw new JsonLdError(
-              "Invalid JSON-LD syntax; an @context @type value must be an absolute IRI.",
-              "jsonld.SyntaxError",
-              { code: "invalid type mapping", context: localCtx }
-            );
+            throw new JsonLdError("Invalid JSON-LD syntax; an @context @type value must be an absolute IRI.", "jsonld.SyntaxError", { code: "invalid type mapping", context: localCtx });
           }
           if (type.indexOf("_:") === 0) {
-            throw new JsonLdError(
-              "Invalid JSON-LD syntax; an @context @type value must be an IRI, not a blank node identifier.",
-              "jsonld.SyntaxError",
-              { code: "invalid type mapping", context: localCtx }
-            );
+            throw new JsonLdError("Invalid JSON-LD syntax; an @context @type value must be an IRI, not a blank node identifier.", "jsonld.SyntaxError", { code: "invalid type mapping", context: localCtx });
           }
         }
         mapping["@type"] = type;
       }
       if ("@container" in value) {
-        const container = _isString(value["@container"])
-          ? [value["@container"]]
-          : value["@container"] || [];
+        const container = _isString(value["@container"]) ? [value["@container"]] : value["@container"] || [];
         const validContainers = ["@list", "@set", "@index", "@language"];
         let isValid = true;
         const hasSet = container.includes("@set");
@@ -2321,27 +1949,11 @@ var require_context = __commonJS({
           validContainers.push("@graph", "@id", "@type");
           if (container.includes("@list")) {
             if (container.length !== 1) {
-              throw new JsonLdError(
-                "Invalid JSON-LD syntax; @context @container with @list must have no other values",
-                "jsonld.SyntaxError",
-                { code: "invalid container mapping", context: localCtx }
-              );
+              throw new JsonLdError("Invalid JSON-LD syntax; @context @container with @list must have no other values", "jsonld.SyntaxError", { code: "invalid container mapping", context: localCtx });
             }
           } else if (container.includes("@graph")) {
-            if (
-              container.some(
-                (key) =>
-                  key !== "@graph" &&
-                  key !== "@id" &&
-                  key !== "@index" &&
-                  key !== "@set"
-              )
-            ) {
-              throw new JsonLdError(
-                "Invalid JSON-LD syntax; @context @container with @graph must have no other values other than @id, @index, and @set",
-                "jsonld.SyntaxError",
-                { code: "invalid container mapping", context: localCtx }
-              );
+            if (container.some((key) => key !== "@graph" && key !== "@id" && key !== "@index" && key !== "@set")) {
+              throw new JsonLdError("Invalid JSON-LD syntax; @context @container with @graph must have no other values other than @id, @index, and @set", "jsonld.SyntaxError", { code: "invalid container mapping", context: localCtx });
             }
           } else {
             isValid &= container.length <= (hasSet ? 2 : 1);
@@ -2349,11 +1961,7 @@ var require_context = __commonJS({
           if (container.includes("@type")) {
             mapping["@type"] = mapping["@type"] || "@id";
             if (!["@id", "@vocab"].includes(mapping["@type"])) {
-              throw new JsonLdError(
-                "Invalid JSON-LD syntax; container: @type requires @type to be @id or @vocab.",
-                "jsonld.SyntaxError",
-                { code: "invalid type mapping", context: localCtx }
-              );
+              throw new JsonLdError("Invalid JSON-LD syntax; container: @type requires @type to be @id or @vocab.", "jsonld.SyntaxError", { code: "invalid type mapping", context: localCtx });
             }
           }
         } else {
@@ -2363,42 +1971,19 @@ var require_context = __commonJS({
         isValid &= container.every((c) => validContainers.includes(c));
         isValid &= !(hasSet && container.includes("@list"));
         if (!isValid) {
-          throw new JsonLdError(
-            "Invalid JSON-LD syntax; @context @container value must be one of the following: " +
-              validContainers.join(", "),
-            "jsonld.SyntaxError",
-            { code: "invalid container mapping", context: localCtx }
-          );
+          throw new JsonLdError("Invalid JSON-LD syntax; @context @container value must be one of the following: " + validContainers.join(", "), "jsonld.SyntaxError", { code: "invalid container mapping", context: localCtx });
         }
-        if (
-          mapping.reverse &&
-          !container.every((c) => ["@index", "@set"].includes(c))
-        ) {
-          throw new JsonLdError(
-            "Invalid JSON-LD syntax; @context @container value for a @reverse type definition must be @index or @set.",
-            "jsonld.SyntaxError",
-            { code: "invalid reverse property", context: localCtx }
-          );
+        if (mapping.reverse && !container.every((c) => ["@index", "@set"].includes(c))) {
+          throw new JsonLdError("Invalid JSON-LD syntax; @context @container value for a @reverse type definition must be @index or @set.", "jsonld.SyntaxError", { code: "invalid reverse property", context: localCtx });
         }
         mapping["@container"] = container;
       }
       if ("@index" in value) {
-        if (
-          !("@container" in value) ||
-          !mapping["@container"].includes("@index")
-        ) {
-          throw new JsonLdError(
-            `Invalid JSON-LD syntax; @index without @index in @container: "${value["@index"]}" on term "${term}".`,
-            "jsonld.SyntaxError",
-            { code: "invalid term definition", context: localCtx }
-          );
+        if (!("@container" in value) || !mapping["@container"].includes("@index")) {
+          throw new JsonLdError(`Invalid JSON-LD syntax; @index without @index in @container: "${value["@index"]}" on term "${term}".`, "jsonld.SyntaxError", { code: "invalid term definition", context: localCtx });
         }
         if (!_isString(value["@index"]) || value["@index"].indexOf("@") === 0) {
-          throw new JsonLdError(
-            `Invalid JSON-LD syntax; @index must expand to an IRI: "${value["@index"]}" on term "${term}".`,
-            "jsonld.SyntaxError",
-            { code: "invalid term definition", context: localCtx }
-          );
+          throw new JsonLdError(`Invalid JSON-LD syntax; @index must expand to an IRI: "${value["@index"]}" on term "${term}".`, "jsonld.SyntaxError", { code: "invalid term definition", context: localCtx });
         }
         mapping["@index"] = value["@index"];
       }
@@ -2408,11 +1993,7 @@ var require_context = __commonJS({
       if ("@language" in value && !("@type" in value)) {
         let language = value["@language"];
         if (language !== null && !_isString(language)) {
-          throw new JsonLdError(
-            "Invalid JSON-LD syntax; @context @language value must be a string or null.",
-            "jsonld.SyntaxError",
-            { code: "invalid language mapping", context: localCtx }
-          );
+          throw new JsonLdError("Invalid JSON-LD syntax; @context @language value must be a string or null.", "jsonld.SyntaxError", { code: "invalid language mapping", context: localCtx });
         }
         if (language !== null) {
           language = language.toLowerCase();
@@ -2421,115 +2002,72 @@ var require_context = __commonJS({
       }
       if ("@prefix" in value) {
         if (term.match(/:|\//)) {
-          throw new JsonLdError(
-            "Invalid JSON-LD syntax; @context @prefix used on a compact IRI term",
-            "jsonld.SyntaxError",
-            { code: "invalid term definition", context: localCtx }
-          );
+          throw new JsonLdError("Invalid JSON-LD syntax; @context @prefix used on a compact IRI term", "jsonld.SyntaxError", { code: "invalid term definition", context: localCtx });
         }
         if (api.isKeyword(mapping["@id"])) {
-          throw new JsonLdError(
-            "Invalid JSON-LD syntax; keywords may not be used as prefixes",
-            "jsonld.SyntaxError",
-            { code: "invalid term definition", context: localCtx }
-          );
+          throw new JsonLdError("Invalid JSON-LD syntax; keywords may not be used as prefixes", "jsonld.SyntaxError", { code: "invalid term definition", context: localCtx });
         }
         if (typeof value["@prefix"] === "boolean") {
           mapping._prefix = value["@prefix"] === true;
         } else {
-          throw new JsonLdError(
-            "Invalid JSON-LD syntax; @context value for @prefix must be boolean",
-            "jsonld.SyntaxError",
-            { code: "invalid @prefix value", context: localCtx }
-          );
+          throw new JsonLdError("Invalid JSON-LD syntax; @context value for @prefix must be boolean", "jsonld.SyntaxError", { code: "invalid @prefix value", context: localCtx });
         }
       }
       if ("@direction" in value) {
         const direction = value["@direction"];
         if (direction !== null && direction !== "ltr" && direction !== "rtl") {
-          throw new JsonLdError(
-            'Invalid JSON-LD syntax; @direction value must be null, "ltr", or "rtl".',
-            "jsonld.SyntaxError",
-            { code: "invalid base direction", context: localCtx }
-          );
+          throw new JsonLdError('Invalid JSON-LD syntax; @direction value must be null, "ltr", or "rtl".', "jsonld.SyntaxError", { code: "invalid base direction", context: localCtx });
         }
         mapping["@direction"] = direction;
       }
       if ("@nest" in value) {
         const nest = value["@nest"];
-        if (!_isString(nest) || (nest !== "@nest" && nest.indexOf("@") === 0)) {
-          throw new JsonLdError(
-            "Invalid JSON-LD syntax; @context @nest value must be a string which is not a keyword other than @nest.",
-            "jsonld.SyntaxError",
-            { code: "invalid @nest value", context: localCtx }
-          );
+        if (!_isString(nest) || nest !== "@nest" && nest.indexOf("@") === 0) {
+          throw new JsonLdError("Invalid JSON-LD syntax; @context @nest value must be a string which is not a keyword other than @nest.", "jsonld.SyntaxError", { code: "invalid @nest value", context: localCtx });
         }
         mapping["@nest"] = nest;
       }
       const id = mapping["@id"];
       if (id === "@context" || id === "@preserve") {
-        throw new JsonLdError(
-          "Invalid JSON-LD syntax; @context and @preserve cannot be aliased.",
-          "jsonld.SyntaxError",
-          { code: "invalid keyword alias", context: localCtx }
-        );
+        throw new JsonLdError("Invalid JSON-LD syntax; @context and @preserve cannot be aliased.", "jsonld.SyntaxError", { code: "invalid keyword alias", context: localCtx });
       }
       if (previousMapping && previousMapping.protected && !overrideProtected) {
         activeCtx.protected[term] = true;
         mapping.protected = true;
         if (!_deepCompare(previousMapping, mapping)) {
-          const protectedMode = (options && options.protectedMode) || "error";
+          const protectedMode = options && options.protectedMode || "error";
           if (protectedMode === "error") {
-            throw new JsonLdError(
-              `Invalid JSON-LD syntax; tried to redefine "${term}" which is a protected term.`,
-              "jsonld.SyntaxError",
-              { code: "protected term redefinition", context: localCtx, term }
-            );
+            throw new JsonLdError(`Invalid JSON-LD syntax; tried to redefine "${term}" which is a protected term.`, "jsonld.SyntaxError", { code: "protected term redefinition", context: localCtx, term });
           } else if (protectedMode === "warn") {
             console.warn("WARNING: protected term redefinition", { term });
             return;
           }
-          throw new JsonLdError(
-            "Invalid protectedMode.",
-            "jsonld.SyntaxError",
-            {
-              code: "invalid protected mode",
-              context: localCtx,
-              term,
-              protectedMode,
-            }
-          );
+          throw new JsonLdError("Invalid protectedMode.", "jsonld.SyntaxError", {
+            code: "invalid protected mode",
+            context: localCtx,
+            term,
+            protectedMode
+          });
         }
       }
     };
     api.expandIri = (activeCtx, value, relativeTo, options) => {
       return _expandIri(activeCtx, value, relativeTo, void 0, void 0, options);
     };
-    function _expandIri(
-      activeCtx,
-      value,
-      relativeTo,
-      localCtx,
-      defined,
-      options
-    ) {
+    function _expandIri(activeCtx, value, relativeTo, localCtx, defined, options) {
       if (value === null || !_isString(value) || api.isKeyword(value)) {
         return value;
       }
       if (value.match(KEYWORD_PATTERN)) {
         return null;
       }
-      if (
-        localCtx &&
-        localCtx.hasOwnProperty(value) &&
-        defined.get(value) !== true
-      ) {
+      if (localCtx && localCtx.hasOwnProperty(value) && defined.get(value) !== true) {
         api.createTermDefinition({
           activeCtx,
           localCtx,
           term: value,
           defined,
-          options,
+          options
         });
       }
       relativeTo = relativeTo || {};
@@ -2555,7 +2093,7 @@ var require_context = __commonJS({
             localCtx,
             term: prefix,
             defined,
-            options,
+            options
           });
         }
         const mapping = activeCtx.mappings.get(prefix);
@@ -2580,10 +2118,10 @@ var require_context = __commonJS({
               vocab: activeCtx["@vocab"],
               value,
               result: prependedResult,
-              typeExpansion,
+              typeExpansion
             },
             activeCtx,
-            options,
+            options
           });
         }
         if (expansionMapResult !== void 0) {
@@ -2614,10 +2152,10 @@ var require_context = __commonJS({
               base,
               value,
               result: prependedResult,
-              typeExpansion,
+              typeExpansion
             },
             activeCtx,
-            options,
+            options
           });
         }
         if (expansionMapResult !== void 0) {
@@ -2631,7 +2169,7 @@ var require_context = __commonJS({
           relativeIri: value,
           activeCtx,
           typeExpansion,
-          options,
+          options
         });
         if (expandedResult !== void 0) {
           value = expandedResult;
@@ -2652,7 +2190,7 @@ var require_context = __commonJS({
         getInverse: _createInverseContext,
         clone: _cloneActiveContext,
         revertToPreviousContext: _revertToPreviousContext,
-        protected: {},
+        protected: {}
       };
       if (INITIAL_CONTEXT_CACHE.size === INITIAL_CONTEXT_CACHE_MAX_SIZE) {
         INITIAL_CONTEXT_CACHE.clear();
@@ -2664,12 +2202,10 @@ var require_context = __commonJS({
         if (activeCtx.inverse) {
           return activeCtx.inverse;
         }
-        const inverse = (activeCtx.inverse = {});
-        const fastCurieMap = (activeCtx.fastCurieMap = {});
+        const inverse = activeCtx.inverse = {};
+        const fastCurieMap = activeCtx.fastCurieMap = {};
         const irisToTerms = {};
-        const defaultLanguage = (
-          activeCtx["@language"] || "@none"
-        ).toLowerCase();
+        const defaultLanguage = (activeCtx["@language"] || "@none").toLowerCase();
         const defaultDirection = activeCtx["@direction"];
         const mappings = activeCtx.mappings;
         const terms = [...mappings.keys()].sort(_compareShortestLeast);
@@ -2705,7 +2241,7 @@ var require_context = __commonJS({
               entry[container] = {
                 "@language": {},
                 "@type": {},
-                "@any": {},
+                "@any": {}
               };
             }
             entry = entry[container];
@@ -2722,44 +2258,24 @@ var require_context = __commonJS({
               const language = mapping["@language"];
               const direction = mapping["@direction"];
               if (language && direction) {
-                _addPreferredTerm(
-                  term,
-                  entry["@language"],
-                  `${language}_${direction}`.toLowerCase()
-                );
+                _addPreferredTerm(term, entry["@language"], `${language}_${direction}`.toLowerCase());
               } else if (language) {
-                _addPreferredTerm(
-                  term,
-                  entry["@language"],
-                  language.toLowerCase()
-                );
+                _addPreferredTerm(term, entry["@language"], language.toLowerCase());
               } else if (direction) {
                 _addPreferredTerm(term, entry["@language"], `_${direction}`);
               } else {
                 _addPreferredTerm(term, entry["@language"], "@null");
               }
             } else if ("@language" in mapping) {
-              _addPreferredTerm(
-                term,
-                entry["@language"],
-                (mapping["@language"] || "@null").toLowerCase()
-              );
+              _addPreferredTerm(term, entry["@language"], (mapping["@language"] || "@null").toLowerCase());
             } else if ("@direction" in mapping) {
               if (mapping["@direction"]) {
-                _addPreferredTerm(
-                  term,
-                  entry["@language"],
-                  `_${mapping["@direction"]}`
-                );
+                _addPreferredTerm(term, entry["@language"], `_${mapping["@direction"]}`);
               } else {
                 _addPreferredTerm(term, entry["@language"], "@none");
               }
             } else if (defaultDirection) {
-              _addPreferredTerm(
-                term,
-                entry["@language"],
-                `_${defaultDirection}`
-              );
+              _addPreferredTerm(term, entry["@language"], `_${defaultDirection}`);
               _addPreferredTerm(term, entry["@language"], "@none");
               _addPreferredTerm(term, entry["@type"], "@none");
             } else {
@@ -2776,7 +2292,7 @@ var require_context = __commonJS({
       }
       function _buildIriMap(iriMap, key2, idx) {
         const entries = iriMap[key2];
-        const next = (iriMap[key2] = {});
+        const next = iriMap[key2] = {};
         let iri;
         let letter;
         for (const entry of entries) {
@@ -2862,10 +2378,7 @@ var require_context = __commonJS({
     };
     api.processingMode = (activeCtx, version) => {
       if (version.toString() >= "1.1") {
-        return (
-          !activeCtx.processingMode ||
-          activeCtx.processingMode >= "json-ld-" + version.toString()
-        );
+        return !activeCtx.processingMode || activeCtx.processingMode >= "json-ld-" + version.toString();
       } else {
         return activeCtx.processingMode === "json-ld-1.0";
       }
@@ -2945,7 +2458,7 @@ var require_context = __commonJS({
       }
       return true;
     }
-  },
+  }
 });
 
 // lib/expand.js
@@ -2958,27 +2471,29 @@ var require_expand = __commonJS({
       isObject: _isObject,
       isEmptyObject: _isEmptyObject,
       isString: _isString,
-      isUndefined: _isUndefined,
+      isUndefined: _isUndefined
     } = require_types();
     var {
       isList: _isList,
       isValue: _isValue,
       isGraph: _isGraph,
-      isSubject: _isSubject,
+      isSubject: _isSubject
     } = require_graphTypes();
     var {
       expandIri: _expandIri,
       getContextValue: _getContextValue,
       isKeyword: _isKeyword,
       process: _processContext,
-      processingMode: _processingMode,
+      processingMode: _processingMode
     } = require_context();
-    var { isAbsolute: _isAbsoluteIri } = require_url();
+    var {
+      isAbsolute: _isAbsoluteIri
+    } = require_url();
     var {
       addValue: _addValue,
       asArray: _asArray,
       getValues: _getValues,
-      validateTypeValue: _validateTypeValue,
+      validateTypeValue: _validateTypeValue
     } = require_util();
     var api = {};
     module.exports = api;
@@ -2991,7 +2506,7 @@ var require_expand = __commonJS({
       insideList = false,
       insideIndex = false,
       typeScopedContext = null,
-      expansionMap = () => void 0,
+      expansionMap = () => void 0
     }) => {
       options = { ...options, expansionMap };
       if (element === null || element === void 0) {
@@ -3001,35 +2516,24 @@ var require_expand = __commonJS({
         options = Object.assign({}, options, { isFrame: false });
       }
       if (!_isArray(element) && !_isObject(element)) {
-        if (
-          !insideList &&
-          (activeProperty === null ||
-            _expandIri(activeCtx, activeProperty, { vocab: true }, options) ===
-              "@graph")
-        ) {
+        if (!insideList && (activeProperty === null || _expandIri(activeCtx, activeProperty, { vocab: true }, options) === "@graph")) {
           const mapped = await expansionMap({
             unmappedValue: element,
             activeCtx,
             activeProperty,
             options,
-            insideList,
+            insideList
           });
           if (mapped === void 0) {
             return null;
           }
           return mapped;
         }
-        return _expandValue({
-          activeCtx,
-          activeProperty,
-          value: element,
-          options,
-        });
+        return _expandValue({ activeCtx, activeProperty, value: element, options });
       }
       if (_isArray(element)) {
         let rval2 = [];
-        const container =
-          _getContextValue(activeCtx, activeProperty, "@container") || [];
+        const container = _getContextValue(activeCtx, activeProperty, "@container") || [];
         insideList = insideList || container.includes("@list");
         for (let i = 0; i < element.length; ++i) {
           let e = await api.expand({
@@ -3039,7 +2543,7 @@ var require_expand = __commonJS({
             options,
             expansionMap,
             insideIndex,
-            typeScopedContext,
+            typeScopedContext
           });
           if (insideList && _isArray(e)) {
             e = { "@list": e };
@@ -3053,7 +2557,7 @@ var require_expand = __commonJS({
               index: i,
               options,
               expandedParent: rval2,
-              insideList,
+              insideList
             });
             if (e === void 0) {
               continue;
@@ -3067,34 +2571,14 @@ var require_expand = __commonJS({
         }
         return rval2;
       }
-      const expandedActiveProperty = _expandIri(
-        activeCtx,
-        activeProperty,
-        { vocab: true },
-        options
-      );
-      const propertyScopedCtx = _getContextValue(
-        activeCtx,
-        activeProperty,
-        "@context"
-      );
-      typeScopedContext =
-        typeScopedContext || (activeCtx.previousContext ? activeCtx : null);
+      const expandedActiveProperty = _expandIri(activeCtx, activeProperty, { vocab: true }, options);
+      const propertyScopedCtx = _getContextValue(activeCtx, activeProperty, "@context");
+      typeScopedContext = typeScopedContext || (activeCtx.previousContext ? activeCtx : null);
       let keys = Object.keys(element).sort();
       let mustRevert = !insideIndex;
-      if (
-        mustRevert &&
-        typeScopedContext &&
-        keys.length <= 2 &&
-        !keys.includes("@context")
-      ) {
+      if (mustRevert && typeScopedContext && keys.length <= 2 && !keys.includes("@context")) {
         for (const key of keys) {
-          const expandedProperty = _expandIri(
-            typeScopedContext,
-            key,
-            { vocab: true },
-            options
-          );
+          const expandedProperty = _expandIri(typeScopedContext, key, { vocab: true }, options);
           if (expandedProperty === "@value") {
             mustRevert = false;
             activeCtx = typeScopedContext;
@@ -3115,33 +2599,20 @@ var require_expand = __commonJS({
           localCtx: propertyScopedCtx,
           propagate: true,
           overrideProtected: true,
-          options,
+          options
         });
       }
       if ("@context" in element) {
-        activeCtx = await _processContext({
-          activeCtx,
-          localCtx: element["@context"],
-          options,
-        });
+        activeCtx = await _processContext({ activeCtx, localCtx: element["@context"], options });
       }
       typeScopedContext = activeCtx;
       let typeKey = null;
       for (const key of keys) {
-        const expandedProperty = _expandIri(
-          activeCtx,
-          key,
-          { vocab: true },
-          options
-        );
+        const expandedProperty = _expandIri(activeCtx, key, { vocab: true }, options);
         if (expandedProperty === "@type") {
           typeKey = typeKey || key;
           const value = element[key];
-          const types = Array.isArray(value)
-            ? value.length > 1
-              ? value.slice().sort()
-              : value
-            : [value];
+          const types = Array.isArray(value) ? value.length > 1 ? value.slice().sort() : value : [value];
           for (const type of types) {
             const ctx = _getContextValue(typeScopedContext, type, "@context");
             if (!_isUndefined(ctx)) {
@@ -3149,7 +2620,7 @@ var require_expand = __commonJS({
                 activeCtx,
                 localCtx: ctx,
                 options,
-                propagate: false,
+                propagate: false
               });
             }
           }
@@ -3166,17 +2637,13 @@ var require_expand = __commonJS({
         insideList,
         typeKey,
         typeScopedContext,
-        expansionMap,
+        expansionMap
       });
       keys = Object.keys(rval);
       let count = keys.length;
       if ("@value" in rval) {
         if ("@type" in rval && ("@language" in rval || "@direction" in rval)) {
-          throw new JsonLdError(
-            'Invalid JSON-LD syntax; an element containing "@value" may not contain both "@type" and either "@language" or "@direction".',
-            "jsonld.SyntaxError",
-            { code: "invalid value object", element: rval }
-          );
+          throw new JsonLdError('Invalid JSON-LD syntax; an element containing "@value" may not contain both "@type" and either "@language" or "@direction".', "jsonld.SyntaxError", { code: "invalid value object", element: rval });
         }
         let validCount = count - 1;
         if ("@type" in rval) {
@@ -3192,19 +2659,11 @@ var require_expand = __commonJS({
           validCount -= 1;
         }
         if (validCount !== 0) {
-          throw new JsonLdError(
-            'Invalid JSON-LD syntax; an element containing "@value" may only have an "@index" property and either "@type" or either or both "@language" or "@direction".',
-            "jsonld.SyntaxError",
-            { code: "invalid value object", element: rval }
-          );
+          throw new JsonLdError('Invalid JSON-LD syntax; an element containing "@value" may only have an "@index" property and either "@type" or either or both "@language" or "@direction".', "jsonld.SyntaxError", { code: "invalid value object", element: rval });
         }
         const values = rval["@value"] === null ? [] : _asArray(rval["@value"]);
         const types = _getValues(rval, "@type");
-        if (
-          _processingMode(activeCtx, 1.1) &&
-          types.includes("@json") &&
-          types.length === 1
-        ) {
+        if (_processingMode(activeCtx, 1.1) && types.includes("@json") && types.length === 1) {
         } else if (values.length === 0) {
           const mapped = await expansionMap({
             unmappedValue: rval,
@@ -3212,44 +2671,23 @@ var require_expand = __commonJS({
             activeProperty,
             element,
             options,
-            insideList,
+            insideList
           });
           if (mapped !== void 0) {
             rval = mapped;
           } else {
             rval = null;
           }
-        } else if (
-          !values.every((v) => _isString(v) || _isEmptyObject(v)) &&
-          "@language" in rval
-        ) {
-          throw new JsonLdError(
-            "Invalid JSON-LD syntax; only strings may be language-tagged.",
-            "jsonld.SyntaxError",
-            { code: "invalid language-tagged value", element: rval }
-          );
-        } else if (
-          !types.every(
-            (t) =>
-              (_isAbsoluteIri(t) && !(_isString(t) && t.indexOf("_:") === 0)) ||
-              _isEmptyObject(t)
-          )
-        ) {
-          throw new JsonLdError(
-            'Invalid JSON-LD syntax; an element containing "@value" and "@type" must have an absolute IRI for the value of "@type".',
-            "jsonld.SyntaxError",
-            { code: "invalid typed value", element: rval }
-          );
+        } else if (!values.every((v) => _isString(v) || _isEmptyObject(v)) && "@language" in rval) {
+          throw new JsonLdError("Invalid JSON-LD syntax; only strings may be language-tagged.", "jsonld.SyntaxError", { code: "invalid language-tagged value", element: rval });
+        } else if (!types.every((t) => _isAbsoluteIri(t) && !(_isString(t) && t.indexOf("_:") === 0) || _isEmptyObject(t))) {
+          throw new JsonLdError('Invalid JSON-LD syntax; an element containing "@value" and "@type" must have an absolute IRI for the value of "@type".', "jsonld.SyntaxError", { code: "invalid typed value", element: rval });
         }
       } else if ("@type" in rval && !_isArray(rval["@type"])) {
         rval["@type"] = [rval["@type"]];
       } else if ("@set" in rval || "@list" in rval) {
         if (count > 1 && !(count === 2 && "@index" in rval)) {
-          throw new JsonLdError(
-            'Invalid JSON-LD syntax; if an element has the property "@set" or "@list", then it can have at most one other property that is "@index".',
-            "jsonld.SyntaxError",
-            { code: "invalid set or list object", element: rval }
-          );
+          throw new JsonLdError('Invalid JSON-LD syntax; if an element has the property "@set" or "@list", then it can have at most one other property that is "@index".', "jsonld.SyntaxError", { code: "invalid set or list object", element: rval });
         }
         if ("@set" in rval) {
           rval = rval["@set"];
@@ -3263,7 +2701,7 @@ var require_expand = __commonJS({
           activeProperty,
           element,
           options,
-          insideList,
+          insideList
         });
         if (mapped !== void 0) {
           rval = mapped;
@@ -3271,25 +2709,15 @@ var require_expand = __commonJS({
           rval = null;
         }
       }
-      if (
-        _isObject(rval) &&
-        !options.keepFreeFloatingNodes &&
-        !insideList &&
-        (activeProperty === null || expandedActiveProperty === "@graph")
-      ) {
-        if (
-          count === 0 ||
-          "@value" in rval ||
-          "@list" in rval ||
-          (count === 1 && "@id" in rval)
-        ) {
+      if (_isObject(rval) && !options.keepFreeFloatingNodes && !insideList && (activeProperty === null || expandedActiveProperty === "@graph")) {
+        if (count === 0 || "@value" in rval || "@list" in rval || count === 1 && "@id" in rval) {
           const mapped = await expansionMap({
             unmappedValue: rval,
             activeCtx,
             activeProperty,
             element,
             options,
-            insideList,
+            insideList
           });
           if (mapped !== void 0) {
             rval = mapped;
@@ -3310,36 +2738,21 @@ var require_expand = __commonJS({
       insideList,
       typeKey,
       typeScopedContext,
-      expansionMap,
+      expansionMap
     }) {
       const keys = Object.keys(element).sort();
       const nests = [];
       let unexpandedValue;
       options = { ...options, expansionMap };
-      const isJsonType =
-        element[typeKey] &&
-        _expandIri(
-          activeCtx,
-          _isArray(element[typeKey]) ? element[typeKey][0] : element[typeKey],
-          { vocab: true },
-          { ...options, typeExpansion: true }
-        ) === "@json";
+      const isJsonType = element[typeKey] && _expandIri(activeCtx, _isArray(element[typeKey]) ? element[typeKey][0] : element[typeKey], { vocab: true }, { ...options, typeExpansion: true }) === "@json";
       for (const key of keys) {
         let value = element[key];
         let expandedValue;
         if (key === "@context") {
           continue;
         }
-        let expandedProperty = _expandIri(
-          activeCtx,
-          key,
-          { vocab: true },
-          options
-        );
-        if (
-          expandedProperty === null ||
-          !(_isAbsoluteIri(expandedProperty) || _isKeyword(expandedProperty))
-        ) {
+        let expandedProperty = _expandIri(activeCtx, key, { vocab: true }, options);
+        if (expandedProperty === null || !(_isAbsoluteIri(expandedProperty) || _isKeyword(expandedProperty))) {
           expandedProperty = expansionMap({
             unmappedProperty: key,
             activeCtx,
@@ -3348,7 +2761,7 @@ var require_expand = __commonJS({
             options,
             insideList,
             value,
-            expandedParent,
+            expandedParent
           });
           if (expandedProperty === void 0) {
             continue;
@@ -3356,146 +2769,66 @@ var require_expand = __commonJS({
         }
         if (_isKeyword(expandedProperty)) {
           if (expandedActiveProperty === "@reverse") {
-            throw new JsonLdError(
-              "Invalid JSON-LD syntax; a keyword cannot be used as a @reverse property.",
-              "jsonld.SyntaxError",
-              { code: "invalid reverse property map", value }
-            );
+            throw new JsonLdError("Invalid JSON-LD syntax; a keyword cannot be used as a @reverse property.", "jsonld.SyntaxError", { code: "invalid reverse property map", value });
           }
-          if (
-            expandedProperty in expandedParent &&
-            expandedProperty !== "@included" &&
-            expandedProperty !== "@type"
-          ) {
-            throw new JsonLdError(
-              "Invalid JSON-LD syntax; colliding keywords detected.",
-              "jsonld.SyntaxError",
-              { code: "colliding keywords", keyword: expandedProperty }
-            );
+          if (expandedProperty in expandedParent && expandedProperty !== "@included" && expandedProperty !== "@type") {
+            throw new JsonLdError("Invalid JSON-LD syntax; colliding keywords detected.", "jsonld.SyntaxError", { code: "colliding keywords", keyword: expandedProperty });
           }
         }
         if (expandedProperty === "@id") {
           if (!_isString(value)) {
             if (!options.isFrame) {
-              throw new JsonLdError(
-                'Invalid JSON-LD syntax; "@id" value must a string.',
-                "jsonld.SyntaxError",
-                { code: "invalid @id value", value }
-              );
+              throw new JsonLdError('Invalid JSON-LD syntax; "@id" value must a string.', "jsonld.SyntaxError", { code: "invalid @id value", value });
             }
             if (_isObject(value)) {
               if (!_isEmptyObject(value)) {
-                throw new JsonLdError(
-                  'Invalid JSON-LD syntax; "@id" value an empty object or array of strings, if framing',
-                  "jsonld.SyntaxError",
-                  { code: "invalid @id value", value }
-                );
+                throw new JsonLdError('Invalid JSON-LD syntax; "@id" value an empty object or array of strings, if framing', "jsonld.SyntaxError", { code: "invalid @id value", value });
               }
             } else if (_isArray(value)) {
               if (!value.every((v) => _isString(v))) {
-                throw new JsonLdError(
-                  'Invalid JSON-LD syntax; "@id" value an empty object or array of strings, if framing',
-                  "jsonld.SyntaxError",
-                  { code: "invalid @id value", value }
-                );
+                throw new JsonLdError('Invalid JSON-LD syntax; "@id" value an empty object or array of strings, if framing', "jsonld.SyntaxError", { code: "invalid @id value", value });
               }
             } else {
-              throw new JsonLdError(
-                'Invalid JSON-LD syntax; "@id" value an empty object or array of strings, if framing',
-                "jsonld.SyntaxError",
-                { code: "invalid @id value", value }
-              );
+              throw new JsonLdError('Invalid JSON-LD syntax; "@id" value an empty object or array of strings, if framing', "jsonld.SyntaxError", { code: "invalid @id value", value });
             }
           }
-          _addValue(
-            expandedParent,
-            "@id",
-            _asArray(value).map((v) =>
-              _isString(v)
-                ? _expandIri(activeCtx, v, { base: true }, options)
-                : v
-            ),
-            { propertyIsArray: options.isFrame }
-          );
+          _addValue(expandedParent, "@id", _asArray(value).map((v) => _isString(v) ? _expandIri(activeCtx, v, { base: true }, options) : v), { propertyIsArray: options.isFrame });
           continue;
         }
         if (expandedProperty === "@type") {
           if (_isObject(value)) {
-            value = Object.fromEntries(
-              Object.entries(value).map(([k, v]) => [
-                _expandIri(typeScopedContext, k, { vocab: true }),
-                _asArray(v).map((vv) =>
-                  _expandIri(
-                    typeScopedContext,
-                    vv,
-                    { base: true, vocab: true },
-                    { ...options, typeExpansion: true }
-                  )
-                ),
-              ])
-            );
+            value = Object.fromEntries(Object.entries(value).map(([k, v]) => [
+              _expandIri(typeScopedContext, k, { vocab: true }),
+              _asArray(v).map((vv) => _expandIri(typeScopedContext, vv, { base: true, vocab: true }, { ...options, typeExpansion: true }))
+            ]));
           }
           _validateTypeValue(value, options.isFrame);
-          _addValue(
-            expandedParent,
-            "@type",
-            _asArray(value).map((v) =>
-              _isString(v)
-                ? _expandIri(
-                    typeScopedContext,
-                    v,
-                    { base: true, vocab: true },
-                    { ...options, typeExpansion: true }
-                  )
-                : v
-            ),
-            { propertyIsArray: options.isFrame }
-          );
+          _addValue(expandedParent, "@type", _asArray(value).map((v) => _isString(v) ? _expandIri(typeScopedContext, v, { base: true, vocab: true }, { ...options, typeExpansion: true }) : v), { propertyIsArray: options.isFrame });
           continue;
         }
-        if (
-          expandedProperty === "@included" &&
-          _processingMode(activeCtx, 1.1)
-        ) {
-          const includedResult = _asArray(
-            await api.expand({
-              activeCtx,
-              activeProperty,
-              element: value,
-              options,
-              expansionMap,
-            })
-          );
+        if (expandedProperty === "@included" && _processingMode(activeCtx, 1.1)) {
+          const includedResult = _asArray(await api.expand({
+            activeCtx,
+            activeProperty,
+            element: value,
+            options,
+            expansionMap
+          }));
           if (!includedResult.every((v) => _isSubject(v))) {
-            throw new JsonLdError(
-              "Invalid JSON-LD syntax; values of @included must expand to node objects.",
-              "jsonld.SyntaxError",
-              { code: "invalid @included value", value }
-            );
+            throw new JsonLdError("Invalid JSON-LD syntax; values of @included must expand to node objects.", "jsonld.SyntaxError", { code: "invalid @included value", value });
           }
-          _addValue(expandedParent, "@included", includedResult, {
-            propertyIsArray: true,
-          });
+          _addValue(expandedParent, "@included", includedResult, { propertyIsArray: true });
           continue;
         }
-        if (
-          expandedProperty === "@graph" &&
-          !(_isObject(value) || _isArray(value))
-        ) {
-          throw new JsonLdError(
-            'Invalid JSON-LD syntax; "@graph" value must not be an object or an array.',
-            "jsonld.SyntaxError",
-            { code: "invalid @graph value", value }
-          );
+        if (expandedProperty === "@graph" && !(_isObject(value) || _isArray(value))) {
+          throw new JsonLdError('Invalid JSON-LD syntax; "@graph" value must not be an object or an array.', "jsonld.SyntaxError", { code: "invalid @graph value", value });
         }
         if (expandedProperty === "@value") {
           unexpandedValue = value;
           if (isJsonType && _processingMode(activeCtx, 1.1)) {
             expandedParent["@value"] = value;
           } else {
-            _addValue(expandedParent, "@value", value, {
-              propertyIsArray: options.isFrame,
-            });
+            _addValue(expandedParent, "@value", value, { propertyIsArray: options.isFrame });
           }
           continue;
         }
@@ -3504,82 +2837,51 @@ var require_expand = __commonJS({
             continue;
           }
           if (!_isString(value) && !options.isFrame) {
-            throw new JsonLdError(
-              'Invalid JSON-LD syntax; "@language" value must be a string.',
-              "jsonld.SyntaxError",
-              { code: "invalid language-tagged string", value }
-            );
+            throw new JsonLdError('Invalid JSON-LD syntax; "@language" value must be a string.', "jsonld.SyntaxError", { code: "invalid language-tagged string", value });
           }
-          value = _asArray(value).map((v) =>
-            _isString(v) ? v.toLowerCase() : v
-          );
+          value = _asArray(value).map((v) => _isString(v) ? v.toLowerCase() : v);
           for (const lang of value) {
             if (_isString(lang) && !lang.match(REGEX_BCP47)) {
               console.warn(`@language must be valid BCP47: ${lang}`);
             }
           }
-          _addValue(expandedParent, "@language", value, {
-            propertyIsArray: options.isFrame,
-          });
+          _addValue(expandedParent, "@language", value, { propertyIsArray: options.isFrame });
           continue;
         }
         if (expandedProperty === "@direction") {
           if (!_isString(value) && !options.isFrame) {
-            throw new JsonLdError(
-              'Invalid JSON-LD syntax; "@direction" value must be a string.',
-              "jsonld.SyntaxError",
-              { code: "invalid base direction", value }
-            );
+            throw new JsonLdError('Invalid JSON-LD syntax; "@direction" value must be a string.', "jsonld.SyntaxError", { code: "invalid base direction", value });
           }
           value = _asArray(value);
           for (const dir of value) {
             if (_isString(dir) && dir !== "ltr" && dir !== "rtl") {
-              throw new JsonLdError(
-                'Invalid JSON-LD syntax; "@direction" must be "ltr" or "rtl".',
-                "jsonld.SyntaxError",
-                { code: "invalid base direction", value }
-              );
+              throw new JsonLdError('Invalid JSON-LD syntax; "@direction" must be "ltr" or "rtl".', "jsonld.SyntaxError", { code: "invalid base direction", value });
             }
           }
-          _addValue(expandedParent, "@direction", value, {
-            propertyIsArray: options.isFrame,
-          });
+          _addValue(expandedParent, "@direction", value, { propertyIsArray: options.isFrame });
           continue;
         }
         if (expandedProperty === "@index") {
           if (!_isString(value)) {
-            throw new JsonLdError(
-              'Invalid JSON-LD syntax; "@index" value must be a string.',
-              "jsonld.SyntaxError",
-              { code: "invalid @index value", value }
-            );
+            throw new JsonLdError('Invalid JSON-LD syntax; "@index" value must be a string.', "jsonld.SyntaxError", { code: "invalid @index value", value });
           }
           _addValue(expandedParent, "@index", value);
           continue;
         }
         if (expandedProperty === "@reverse") {
           if (!_isObject(value)) {
-            throw new JsonLdError(
-              'Invalid JSON-LD syntax; "@reverse" value must be an object.',
-              "jsonld.SyntaxError",
-              { code: "invalid @reverse value", value }
-            );
+            throw new JsonLdError('Invalid JSON-LD syntax; "@reverse" value must be an object.', "jsonld.SyntaxError", { code: "invalid @reverse value", value });
           }
           expandedValue = await api.expand({
             activeCtx,
             activeProperty: "@reverse",
             element: value,
             options,
-            expansionMap,
+            expansionMap
           });
           if ("@reverse" in expandedValue) {
             for (const property in expandedValue["@reverse"]) {
-              _addValue(
-                expandedParent,
-                property,
-                expandedValue["@reverse"][property],
-                { propertyIsArray: true }
-              );
+              _addValue(expandedParent, property, expandedValue["@reverse"][property], { propertyIsArray: true });
             }
           }
           let reverseMap = expandedParent["@reverse"] || null;
@@ -3595,14 +2897,7 @@ var require_expand = __commonJS({
             for (let ii = 0; ii < items.length; ++ii) {
               const item = items[ii];
               if (_isValue(item) || _isList(item)) {
-                throw new JsonLdError(
-                  'Invalid JSON-LD syntax; "@reverse" value must not be a @value or an @list.',
-                  "jsonld.SyntaxError",
-                  {
-                    code: "invalid reverse property value",
-                    value: expandedValue,
-                  }
-                );
+                throw new JsonLdError('Invalid JSON-LD syntax; "@reverse" value must not be a @value or an @list.', "jsonld.SyntaxError", { code: "invalid reverse property value", value: expandedValue });
               }
               _addValue(reverseMap, property, item, { propertyIsArray: true });
             }
@@ -3621,24 +2916,17 @@ var require_expand = __commonJS({
             localCtx: ctx,
             propagate: true,
             overrideProtected: true,
-            options,
+            options
           });
         }
         const container = _getContextValue(termCtx, key, "@container") || [];
         if (container.includes("@language") && _isObject(value)) {
           const direction = _getContextValue(termCtx, key, "@direction");
-          expandedValue = _expandLanguageMap(
-            termCtx,
-            value,
-            direction,
-            options
-          );
+          expandedValue = _expandLanguageMap(termCtx, value, direction, options);
         } else if (container.includes("@index") && _isObject(value)) {
           const asGraph = container.includes("@graph");
           const indexKey = _getContextValue(termCtx, key, "@index") || "@index";
-          const propertyIndex =
-            indexKey !== "@index" &&
-            _expandIri(activeCtx, indexKey, { vocab: true }, options);
+          const propertyIndex = indexKey !== "@index" && _expandIri(activeCtx, indexKey, { vocab: true }, options);
           expandedValue = await _expandIndexMap({
             activeCtx: termCtx,
             options,
@@ -3647,7 +2935,7 @@ var require_expand = __commonJS({
             expansionMap,
             asGraph,
             indexKey,
-            propertyIndex,
+            propertyIndex
           });
         } else if (container.includes("@id") && _isObject(value)) {
           const asGraph = container.includes("@graph");
@@ -3658,7 +2946,7 @@ var require_expand = __commonJS({
             value,
             expansionMap,
             asGraph,
-            indexKey: "@id",
+            indexKey: "@id"
           });
         } else if (container.includes("@type") && _isObject(value)) {
           expandedValue = await _expandIndexMap({
@@ -3668,7 +2956,7 @@ var require_expand = __commonJS({
             value,
             expansionMap,
             asGraph: false,
-            indexKey: "@type",
+            indexKey: "@type"
           });
         } else {
           const isList = expandedProperty === "@list";
@@ -3683,12 +2971,12 @@ var require_expand = __commonJS({
               element: value,
               options,
               insideList: isList,
-              expansionMap,
+              expansionMap
             });
           } else if (_getContextValue(activeCtx, key, "@type") === "@json") {
             expandedValue = {
               "@type": "@json",
-              "@value": value,
+              "@value": value
             };
           } else {
             expandedValue = await api.expand({
@@ -3697,7 +2985,7 @@ var require_expand = __commonJS({
               element: value,
               options,
               insideList: false,
-              expansionMap,
+              expansionMap
             });
           }
         }
@@ -3711,83 +2999,45 @@ var require_expand = __commonJS({
             options,
             insideList,
             key,
-            expandedParent,
+            expandedParent
           });
           if (expandedValue === void 0) {
             continue;
           }
         }
-        if (
-          expandedProperty !== "@list" &&
-          !_isList(expandedValue) &&
-          container.includes("@list")
-        ) {
+        if (expandedProperty !== "@list" && !_isList(expandedValue) && container.includes("@list")) {
           expandedValue = { "@list": _asArray(expandedValue) };
         }
-        if (
-          container.includes("@graph") &&
-          !container.some((key2) => key2 === "@id" || key2 === "@index")
-        ) {
-          expandedValue = _asArray(expandedValue).map((v) => ({
-            "@graph": _asArray(v),
-          }));
+        if (container.includes("@graph") && !container.some((key2) => key2 === "@id" || key2 === "@index")) {
+          expandedValue = _asArray(expandedValue).map((v) => ({ "@graph": _asArray(v) }));
         }
         if (termCtx.mappings.has(key) && termCtx.mappings.get(key).reverse) {
-          const reverseMap = (expandedParent["@reverse"] =
-            expandedParent["@reverse"] || {});
+          const reverseMap = expandedParent["@reverse"] = expandedParent["@reverse"] || {};
           expandedValue = _asArray(expandedValue);
           for (let ii = 0; ii < expandedValue.length; ++ii) {
             const item = expandedValue[ii];
             if (_isValue(item) || _isList(item)) {
-              throw new JsonLdError(
-                'Invalid JSON-LD syntax; "@reverse" value must not be a @value or an @list.',
-                "jsonld.SyntaxError",
-                { code: "invalid reverse property value", value: expandedValue }
-              );
+              throw new JsonLdError('Invalid JSON-LD syntax; "@reverse" value must not be a @value or an @list.', "jsonld.SyntaxError", { code: "invalid reverse property value", value: expandedValue });
             }
-            _addValue(reverseMap, expandedProperty, item, {
-              propertyIsArray: true,
-            });
+            _addValue(reverseMap, expandedProperty, item, { propertyIsArray: true });
           }
           continue;
         }
         _addValue(expandedParent, expandedProperty, expandedValue, {
-          propertyIsArray: true,
+          propertyIsArray: true
         });
       }
       if ("@value" in expandedParent) {
-        if (
-          expandedParent["@type"] === "@json" &&
-          _processingMode(activeCtx, 1.1)
-        ) {
-        } else if (
-          (_isObject(unexpandedValue) || _isArray(unexpandedValue)) &&
-          !options.isFrame
-        ) {
-          throw new JsonLdError(
-            'Invalid JSON-LD syntax; "@value" value must not be an object or an array.',
-            "jsonld.SyntaxError",
-            { code: "invalid value object value", value: unexpandedValue }
-          );
+        if (expandedParent["@type"] === "@json" && _processingMode(activeCtx, 1.1)) {
+        } else if ((_isObject(unexpandedValue) || _isArray(unexpandedValue)) && !options.isFrame) {
+          throw new JsonLdError('Invalid JSON-LD syntax; "@value" value must not be an object or an array.', "jsonld.SyntaxError", { code: "invalid value object value", value: unexpandedValue });
         }
       }
       for (const key of nests) {
-        const nestedValues = _isArray(element[key])
-          ? element[key]
-          : [element[key]];
+        const nestedValues = _isArray(element[key]) ? element[key] : [element[key]];
         for (const nv of nestedValues) {
-          if (
-            !_isObject(nv) ||
-            Object.keys(nv).some(
-              (k) =>
-                _expandIri(activeCtx, k, { vocab: true }, options) === "@value"
-            )
-          ) {
-            throw new JsonLdError(
-              "Invalid JSON-LD syntax; nested value must be a node object.",
-              "jsonld.SyntaxError",
-              { code: "invalid @nest value", value: nv }
-            );
+          if (!_isObject(nv) || Object.keys(nv).some((k) => _expandIri(activeCtx, k, { vocab: true }, options) === "@value")) {
+            throw new JsonLdError("Invalid JSON-LD syntax; nested value must be a node object.", "jsonld.SyntaxError", { code: "invalid @nest value", value: nv });
           }
           await _expandObject({
             activeCtx,
@@ -3799,7 +3049,7 @@ var require_expand = __commonJS({
             insideList,
             typeScopedContext,
             typeKey,
-            expansionMap,
+            expansionMap
           });
         }
       }
@@ -3808,37 +3058,19 @@ var require_expand = __commonJS({
       if (value === null || value === void 0) {
         return null;
       }
-      const expandedProperty = _expandIri(
-        activeCtx,
-        activeProperty,
-        { vocab: true },
-        options
-      );
+      const expandedProperty = _expandIri(activeCtx, activeProperty, { vocab: true }, options);
       if (expandedProperty === "@id") {
         return _expandIri(activeCtx, value, { base: true }, options);
       } else if (expandedProperty === "@type") {
-        return _expandIri(
-          activeCtx,
-          value,
-          { vocab: true, base: true },
-          { ...options, typeExpansion: true }
-        );
+        return _expandIri(activeCtx, value, { vocab: true, base: true }, { ...options, typeExpansion: true });
       }
       const type = _getContextValue(activeCtx, activeProperty, "@type");
-      if (
-        (type === "@id" || expandedProperty === "@graph") &&
-        _isString(value)
-      ) {
+      if ((type === "@id" || expandedProperty === "@graph") && _isString(value)) {
         return { "@id": _expandIri(activeCtx, value, { base: true }, options) };
       }
       if (type === "@vocab" && _isString(value)) {
         return {
-          "@id": _expandIri(
-            activeCtx,
-            value,
-            { vocab: true, base: true },
-            options
-          ),
+          "@id": _expandIri(activeCtx, value, { vocab: true, base: true }, options)
         };
       }
       if (_isKeyword(expandedProperty)) {
@@ -3848,19 +3080,11 @@ var require_expand = __commonJS({
       if (type && !["@id", "@vocab", "@none"].includes(type)) {
         rval["@type"] = type;
       } else if (_isString(value)) {
-        const language = _getContextValue(
-          activeCtx,
-          activeProperty,
-          "@language"
-        );
+        const language = _getContextValue(activeCtx, activeProperty, "@language");
         if (language !== null) {
           rval["@language"] = language;
         }
-        const direction = _getContextValue(
-          activeCtx,
-          activeProperty,
-          "@direction"
-        );
+        const direction = _getContextValue(activeCtx, activeProperty, "@direction");
         if (direction !== null) {
           rval["@direction"] = direction;
         }
@@ -3875,12 +3099,7 @@ var require_expand = __commonJS({
       const rval = [];
       const keys = Object.keys(languageMap).sort();
       for (const key of keys) {
-        const expandedKey = _expandIri(
-          activeCtx,
-          key,
-          { vocab: true },
-          options
-        );
+        const expandedKey = _expandIri(activeCtx, key, { vocab: true }, options);
         let val = languageMap[key];
         if (!_isArray(val)) {
           val = [val];
@@ -3890,11 +3109,7 @@ var require_expand = __commonJS({
             continue;
           }
           if (!_isString(item)) {
-            throw new JsonLdError(
-              "Invalid JSON-LD syntax; language map values must be strings.",
-              "jsonld.SyntaxError",
-              { code: "invalid language map value", languageMap }
-            );
+            throw new JsonLdError("Invalid JSON-LD syntax; language map values must be strings.", "jsonld.SyntaxError", { code: "invalid language map value", languageMap });
           }
           const val2 = { "@value": item };
           if (expandedKey !== "@none") {
@@ -3916,7 +3131,7 @@ var require_expand = __commonJS({
       expansionMap,
       asGraph,
       indexKey,
-      propertyIndex,
+      propertyIndex
     }) {
       const rval = [];
       const keys = Object.keys(value).sort();
@@ -3929,7 +3144,7 @@ var require_expand = __commonJS({
               activeCtx,
               localCtx: ctx,
               propagate: false,
-              options,
+              options
             });
           }
         }
@@ -3944,19 +3159,14 @@ var require_expand = __commonJS({
           options,
           insideList: false,
           insideIndex: true,
-          expansionMap,
+          expansionMap
         });
         let expandedKey;
         if (propertyIndex) {
           if (key === "@none") {
             expandedKey = "@none";
           } else {
-            expandedKey = _expandValue({
-              activeCtx,
-              activeProperty: indexKey,
-              value: key,
-              options,
-            });
+            expandedKey = _expandValue({ activeCtx, activeProperty: indexKey, value: key, options });
           }
         } else {
           expandedKey = _expandIri(activeCtx, key, { vocab: true }, options);
@@ -3977,20 +3187,13 @@ var require_expand = __commonJS({
             } else {
               item["@type"] = [key];
             }
-          } else if (
-            _isValue(item) &&
-            !["@language", "@type", "@index"].includes(indexKey)
-          ) {
-            throw new JsonLdError(
-              `Invalid JSON-LD syntax; Attempt to add illegal key to value object: "${indexKey}".`,
-              "jsonld.SyntaxError",
-              { code: "invalid value object", value: item }
-            );
+          } else if (_isValue(item) && !["@language", "@type", "@index"].includes(indexKey)) {
+            throw new JsonLdError(`Invalid JSON-LD syntax; Attempt to add illegal key to value object: "${indexKey}".`, "jsonld.SyntaxError", { code: "invalid value object", value: item });
           } else if (propertyIndex) {
             if (expandedKey !== "@none") {
               _addValue(item, propertyIndex, expandedKey, {
                 propertyIsArray: true,
-                prependValue: true,
+                prependValue: true
               });
             }
           } else if (expandedKey !== "@none" && !(indexKey in item)) {
@@ -4001,7 +3204,7 @@ var require_expand = __commonJS({
       }
       return rval;
     }
-  },
+  }
 });
 
 // lib/nodeMap.js
@@ -4061,15 +3264,13 @@ var require_nodeMap = __commonJS({
         }
       }
       if (types.isUndefined(name)) {
-        name = graphTypes.isBlankNode(input)
-          ? issuer.getId(input["@id"])
-          : input["@id"];
+        name = graphTypes.isBlankNode(input) ? issuer.getId(input["@id"]) : input["@id"];
       }
       if (list) {
         list.push({ "@id": name });
       }
       const subjects = graphs[graph];
-      const subject = (subjects[name] = subjects[name] || {});
+      const subject = subjects[name] = subjects[name] || {};
       subject["@id"] = name;
       const properties = Object.keys(input).sort();
       for (let property of properties) {
@@ -4087,12 +3288,7 @@ var require_nodeMap = __commonJS({
                 itemName = issuer.getId(itemName);
               }
               api.createNodeMap(item, graphs, graph, issuer, itemName);
-              util.addValue(
-                subjects[itemName],
-                reverseProperty,
-                referencedNode,
-                { propertyIsArray: true, allowDuplicate: false }
-              );
+              util.addValue(subjects[itemName], reverseProperty, referencedNode, { propertyIsArray: true, allowDuplicate: false });
             }
           }
           continue;
@@ -4109,17 +3305,8 @@ var require_nodeMap = __commonJS({
           continue;
         }
         if (property !== "@type" && isKeyword(property)) {
-          if (
-            property === "@index" &&
-            property in subject &&
-            (input[property] !== subject[property] ||
-              input[property]["@id"] !== subject[property]["@id"])
-          ) {
-            throw new JsonLdError(
-              "Invalid JSON-LD syntax; conflicting @index property detected.",
-              "jsonld.SyntaxError",
-              { code: "conflicting indexes", subject }
-            );
+          if (property === "@index" && property in subject && (input[property] !== subject[property] || input[property]["@id"] !== subject[property]["@id"])) {
+            throw new JsonLdError("Invalid JSON-LD syntax; conflicting @index property detected.", "jsonld.SyntaxError", { code: "conflicting indexes", subject });
           }
           subject[property] = input[property];
           continue;
@@ -4140,35 +3327,19 @@ var require_nodeMap = __commonJS({
             if ("@id" in o && !o["@id"]) {
               continue;
             }
-            const id = graphTypes.isBlankNode(o)
-              ? issuer.getId(o["@id"])
-              : o["@id"];
-            util.addValue(
-              subject,
-              property,
-              { "@id": id },
-              { propertyIsArray: true, allowDuplicate: false }
-            );
+            const id = graphTypes.isBlankNode(o) ? issuer.getId(o["@id"]) : o["@id"];
+            util.addValue(subject, property, { "@id": id }, { propertyIsArray: true, allowDuplicate: false });
             api.createNodeMap(o, graphs, graph, issuer, id);
           } else if (graphTypes.isValue(o)) {
-            util.addValue(subject, property, o, {
-              propertyIsArray: true,
-              allowDuplicate: false,
-            });
+            util.addValue(subject, property, o, { propertyIsArray: true, allowDuplicate: false });
           } else if (graphTypes.isList(o)) {
             const _list = [];
             api.createNodeMap(o["@list"], graphs, graph, issuer, name, _list);
             o = { "@list": _list };
-            util.addValue(subject, property, o, {
-              propertyIsArray: true,
-              allowDuplicate: false,
-            });
+            util.addValue(subject, property, o, { propertyIsArray: true, allowDuplicate: false });
           } else {
             api.createNodeMap(o, graphs, graph, issuer, name);
-            util.addValue(subject, property, o, {
-              propertyIsArray: true,
-              allowDuplicate: false,
-            });
+            util.addValue(subject, property, o, { propertyIsArray: true, allowDuplicate: false });
           }
         }
       }
@@ -4187,10 +3358,7 @@ var require_nodeMap = __commonJS({
               mergedNode[property] = util.clone(node[property]);
             } else {
               for (const value of node[property]) {
-                util.addValue(mergedNode, property, util.clone(value), {
-                  propertyIsArray: true,
-                  allowDuplicate: false,
-                });
+                util.addValue(mergedNode, property, util.clone(value), { propertyIsArray: true, allowDuplicate: false });
               }
             }
           }
@@ -4210,7 +3378,7 @@ var require_nodeMap = __commonJS({
         if (!subject) {
           defaultGraph[graphName] = subject = {
             "@id": graphName,
-            "@graph": [],
+            "@graph": []
           };
         } else if (!("@graph" in subject)) {
           subject["@graph"] = [];
@@ -4225,15 +3393,19 @@ var require_nodeMap = __commonJS({
       }
       return defaultGraph;
     };
-  },
+  }
 });
 
 // lib/flatten.js
 var require_flatten = __commonJS({
   "lib/flatten.js"(exports, module) {
     "use strict";
-    var { isSubjectReference: _isSubjectReference } = require_graphTypes();
-    var { createMergedNodeMap: _createMergedNodeMap } = require_nodeMap();
+    var {
+      isSubjectReference: _isSubjectReference
+    } = require_graphTypes();
+    var {
+      createMergedNodeMap: _createMergedNodeMap
+    } = require_nodeMap();
     var api = {};
     module.exports = api;
     api.flatten = (input) => {
@@ -4248,7 +3420,7 @@ var require_flatten = __commonJS({
       }
       return flattened;
     };
-  },
+  }
 });
 
 // lib/fromRdf.js
@@ -4269,23 +3441,21 @@ var require_fromRdf = __commonJS({
       XSD_BOOLEAN,
       XSD_DOUBLE,
       XSD_INTEGER,
-      XSD_STRING,
+      XSD_STRING
     } = require_constants();
     var REGEX_BCP47 = /^[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*$/;
     var api = {};
     module.exports = api;
-    api.fromRDF = async (
-      dataset,
-      { useRdfType = false, useNativeTypes = false, rdfDirection = null }
-    ) => {
+    api.fromRDF = async (dataset, {
+      useRdfType = false,
+      useNativeTypes = false,
+      rdfDirection = null
+    }) => {
       const defaultGraph = {};
       const graphMap = { "@default": defaultGraph };
       const referencedOnce = {};
       for (const quad of dataset) {
-        const name =
-          quad.graph.termType === "DefaultGraph"
-            ? "@default"
-            : quad.graph.value;
+        const name = quad.graph.termType === "DefaultGraph" ? "@default" : quad.graph.value;
         if (!(name in graphMap)) {
           graphMap[name] = {};
         }
@@ -4319,7 +3489,7 @@ var require_fromRdf = __commonJS({
             object.usages.push({
               node,
               property: p,
-              value,
+              value
             });
           } else if (o.value in referencedOnce) {
             referencedOnce[o.value] = false;
@@ -4327,7 +3497,7 @@ var require_fromRdf = __commonJS({
             referencedOnce[o.value] = {
               node,
               property: p,
-              value,
+              value
             };
           }
         }
@@ -4348,19 +3518,7 @@ var require_fromRdf = __commonJS({
           const list = [];
           const listNodes = [];
           let nodeKeyCount = Object.keys(node).length;
-          while (
-            property === RDF_REST &&
-            types.isObject(referencedOnce[node["@id"]]) &&
-            types.isArray(node[RDF_FIRST]) &&
-            node[RDF_FIRST].length === 1 &&
-            types.isArray(node[RDF_REST]) &&
-            node[RDF_REST].length === 1 &&
-            (nodeKeyCount === 3 ||
-              (nodeKeyCount === 4 &&
-                types.isArray(node["@type"]) &&
-                node["@type"].length === 1 &&
-                node["@type"][0] === RDF_LIST))
-          ) {
+          while (property === RDF_REST && types.isObject(referencedOnce[node["@id"]]) && types.isArray(node[RDF_FIRST]) && node[RDF_FIRST].length === 1 && types.isArray(node[RDF_REST]) && node[RDF_REST].length === 1 && (nodeKeyCount === 3 || nodeKeyCount === 4 && types.isArray(node["@type"]) && node["@type"].length === 1 && node["@type"][0] === RDF_LIST)) {
             list.push(node[RDF_FIRST][0]);
             listNodes.push(node["@id"]);
             usage = referencedOnce[node["@id"]];
@@ -4385,7 +3543,7 @@ var require_fromRdf = __commonJS({
       for (const subject of subjects) {
         const node = defaultGraph[subject];
         if (subject in graphMap) {
-          const graph = (node["@graph"] = []);
+          const graph = node["@graph"] = [];
           const graphObject = graphMap[subject];
           const graphSubjects = Object.keys(graphObject).sort();
           for (const graphSubject of graphSubjects) {
@@ -4418,11 +3576,7 @@ var require_fromRdf = __commonJS({
           try {
             rval["@value"] = JSON.parse(rval["@value"]);
           } catch (e) {
-            throw new JsonLdError(
-              "JSON literal could not be parsed.",
-              "jsonld.InvalidJsonLiteral",
-              { code: "invalid JSON literal", value: rval["@value"], cause: e }
-            );
+            throw new JsonLdError("JSON literal could not be parsed.", "jsonld.InvalidJsonLiteral", { code: "invalid JSON literal", value: rval["@value"], cause: e });
           }
         }
         if (useNativeTypes) {
@@ -4442,15 +3596,10 @@ var require_fromRdf = __commonJS({
               rval["@value"] = parseFloat(rval["@value"]);
             }
           }
-          if (
-            ![XSD_BOOLEAN, XSD_INTEGER, XSD_DOUBLE, XSD_STRING].includes(type)
-          ) {
+          if (![XSD_BOOLEAN, XSD_INTEGER, XSD_DOUBLE, XSD_STRING].includes(type)) {
             rval["@type"] = type;
           }
-        } else if (
-          rdfDirection === "i18n-datatype" &&
-          type.startsWith("https://www.w3.org/ns/i18n#")
-        ) {
+        } else if (rdfDirection === "i18n-datatype" && type.startsWith("https://www.w3.org/ns/i18n#")) {
           const [, language, direction] = type.split(/[#_]/);
           if (language.length > 0) {
             rval["@language"] = language;
@@ -4465,7 +3614,7 @@ var require_fromRdf = __commonJS({
       }
       return rval;
     }
-  },
+  }
 });
 
 // node_modules/canonicalize/lib/canonicalize.js
@@ -4473,39 +3622,25 @@ var require_canonicalize = __commonJS({
   "node_modules/canonicalize/lib/canonicalize.js"(exports, module) {
     "use strict";
     module.exports = function serialize(object) {
-      if (
-        object === null ||
-        typeof object !== "object" ||
-        object.toJSON != null
-      ) {
+      if (object === null || typeof object !== "object" || object.toJSON != null) {
         return JSON.stringify(object);
       }
       if (Array.isArray(object)) {
-        return (
-          "[" +
-          object.reduce((t, cv, ci) => {
-            const comma = ci === 0 ? "" : ",";
-            const value = cv === void 0 || typeof cv === "symbol" ? null : cv;
-            return t + comma + serialize(value);
-          }, "") +
-          "]"
-        );
+        return "[" + object.reduce((t, cv, ci) => {
+          const comma = ci === 0 ? "" : ",";
+          const value = cv === void 0 || typeof cv === "symbol" ? null : cv;
+          return t + comma + serialize(value);
+        }, "") + "]";
       }
-      return (
-        "{" +
-        Object.keys(object)
-          .sort()
-          .reduce((t, cv, ci) => {
-            if (object[cv] === void 0 || typeof object[cv] === "symbol") {
-              return t;
-            }
-            const comma = t.length === 0 ? "" : ",";
-            return t + comma + serialize(cv) + ":" + serialize(object[cv]);
-          }, "") +
-        "}"
-      );
+      return "{" + Object.keys(object).sort().reduce((t, cv, ci) => {
+        if (object[cv] === void 0 || typeof object[cv] === "symbol") {
+          return t;
+        }
+        const comma = t.length === 0 ? "" : ",";
+        return t + comma + serialize(cv) + ":" + serialize(object[cv]);
+      }, "") + "}";
     };
-  },
+  }
 });
 
 // lib/toRdf.js
@@ -4528,9 +3663,11 @@ var require_toRdf = __commonJS({
       XSD_BOOLEAN,
       XSD_DOUBLE,
       XSD_INTEGER,
-      XSD_STRING,
+      XSD_STRING
     } = require_constants();
-    var { isAbsolute: _isAbsoluteIri } = require_url();
+    var {
+      isAbsolute: _isAbsoluteIri
+    } = require_url();
     var api = {};
     module.exports = api;
     api.toRDF = (input, options) => {
@@ -4572,37 +3709,28 @@ var require_toRdf = __commonJS({
           for (const item of items) {
             const subject = {
               termType: id.startsWith("_:") ? "BlankNode" : "NamedNode",
-              value: id,
+              value: id
             };
             if (!_isAbsoluteIri(id)) {
               continue;
             }
             const predicate = {
               termType: property.startsWith("_:") ? "BlankNode" : "NamedNode",
-              value: property,
+              value: property
             };
             if (!_isAbsoluteIri(property)) {
               continue;
             }
-            if (
-              predicate.termType === "BlankNode" &&
-              !options.produceGeneralizedRdf
-            ) {
+            if (predicate.termType === "BlankNode" && !options.produceGeneralizedRdf) {
               continue;
             }
-            const object = _objectToRDF(
-              item,
-              issuer,
-              dataset,
-              graphTerm,
-              options.rdfDirection
-            );
+            const object = _objectToRDF(item, issuer, dataset, graphTerm, options.rdfDirection);
             if (object) {
               dataset.push({
                 subject,
                 predicate,
                 object,
-                graph: graphTerm,
+                graph: graphTerm
               });
             }
           }
@@ -4614,52 +3742,38 @@ var require_toRdf = __commonJS({
       const rest = { termType: "NamedNode", value: RDF_REST };
       const nil = { termType: "NamedNode", value: RDF_NIL };
       const last = list.pop();
-      const result = last
-        ? { termType: "BlankNode", value: issuer.getId() }
-        : nil;
+      const result = last ? { termType: "BlankNode", value: issuer.getId() } : nil;
       let subject = result;
       for (const item of list) {
-        const object = _objectToRDF(
-          item,
-          issuer,
-          dataset,
-          graphTerm,
-          rdfDirection
-        );
+        const object = _objectToRDF(item, issuer, dataset, graphTerm, rdfDirection);
         const next = { termType: "BlankNode", value: issuer.getId() };
         dataset.push({
           subject,
           predicate: first,
           object,
-          graph: graphTerm,
+          graph: graphTerm
         });
         dataset.push({
           subject,
           predicate: rest,
           object: next,
-          graph: graphTerm,
+          graph: graphTerm
         });
         subject = next;
       }
       if (last) {
-        const object = _objectToRDF(
-          last,
-          issuer,
-          dataset,
-          graphTerm,
-          rdfDirection
-        );
+        const object = _objectToRDF(last, issuer, dataset, graphTerm, rdfDirection);
         dataset.push({
           subject,
           predicate: first,
           object,
-          graph: graphTerm,
+          graph: graphTerm
         });
         dataset.push({
           subject,
           predicate: rest,
           object: nil,
-          graph: graphTerm,
+          graph: graphTerm
         });
       }
       return result;
@@ -4670,7 +3784,7 @@ var require_toRdf = __commonJS({
         object.termType = "Literal";
         object.value = void 0;
         object.datatype = {
-          termType: "NamedNode",
+          termType: "NamedNode"
         };
         let value = item["@value"];
         const datatype = item["@type"] || null;
@@ -4690,10 +3804,7 @@ var require_toRdf = __commonJS({
           object.value = value.toFixed(0);
           object.datatype.value = datatype || XSD_INTEGER;
         } else if (rdfDirection === "i18n-datatype" && "@direction" in item) {
-          const datatype2 =
-            "https://www.w3.org/ns/i18n#" +
-            (item["@language"] || "") +
-            `_${item["@direction"]}`;
+          const datatype2 = "https://www.w3.org/ns/i18n#" + (item["@language"] || "") + `_${item["@direction"]}`;
           object.datatype.value = datatype2;
           object.value = value;
         } else if ("@language" in item) {
@@ -4705,13 +3816,7 @@ var require_toRdf = __commonJS({
           object.datatype.value = datatype || XSD_STRING;
         }
       } else if (graphTypes.isList(item)) {
-        const _list = _listToRDF(
-          item["@list"],
-          issuer,
-          dataset,
-          graphTerm,
-          rdfDirection
-        );
+        const _list = _listToRDF(item["@list"], issuer, dataset, graphTerm, rdfDirection);
         object.termType = _list.termType;
         object.value = _list.value;
       } else {
@@ -4724,7 +3829,7 @@ var require_toRdf = __commonJS({
       }
       return object;
     }
-  },
+  }
 });
 
 // lib/frame.js
@@ -4739,7 +3844,7 @@ var require_frame = __commonJS({
     var JsonLdError = require_JsonLdError();
     var {
       createNodeMap: _createNodeMap,
-      mergeNodeMapGraphs: _mergeNodeMapGraphs,
+      mergeNodeMapGraphs: _mergeNodeMapGraphs
     } = require_nodeMap();
     var api = {};
     module.exports = api;
@@ -4751,7 +3856,7 @@ var require_frame = __commonJS({
         graphMap: { "@default": {} },
         subjectStack: [],
         link: {},
-        bnodeMap: {},
+        bnodeMap: {}
       };
       const issuer = new util.IdentifierIssuer("_:b");
       _createNodeMap(input, state.graphMap, "@default", issuer);
@@ -4763,9 +3868,7 @@ var require_frame = __commonJS({
       const framed = [];
       api.frame(state, Object.keys(state.subjects).sort(), frame, framed);
       if (options.pruneBlankNodeIdentifiers) {
-        options.bnodesToClear = Object.keys(state.bnodeMap).filter(
-          (id) => state.bnodeMap[id].length === 1
-        );
+        options.bnodesToClear = Object.keys(state.bnodeMap).filter((id) => state.bnodeMap[id].length === 1);
       }
       options.link = {};
       return _cleanupPreserve(framed, options);
@@ -4777,7 +3880,7 @@ var require_frame = __commonJS({
       const flags = {
         embed: _getFrameFlag(frame, options, "embed"),
         explicit: _getFrameFlag(frame, options, "explicit"),
-        requireAll: _getFrameFlag(frame, options, "requireAll"),
+        requireAll: _getFrameFlag(frame, options, "requireAll")
       };
       if (!state.link.hasOwnProperty(state.graph)) {
         state.link[state.graph] = {};
@@ -4790,8 +3893,7 @@ var require_frame = __commonJS({
         if (property === null) {
           state.uniqueEmbeds = { [state.graph]: {} };
         } else {
-          state.uniqueEmbeds[state.graph] =
-            state.uniqueEmbeds[state.graph] || {};
+          state.uniqueEmbeds[state.graph] = state.uniqueEmbeds[state.graph] || {};
         }
         if (flags.embed === "@link" && id in link) {
           _addFrameOutput(parent, property, link[id]);
@@ -4802,35 +3904,17 @@ var require_frame = __commonJS({
           util.addValue(state.bnodeMap, id, output, { propertyIsArray: true });
         }
         link[id] = output;
-        if (
-          (flags.embed === "@first" || flags.embed === "@last") &&
-          state.is11
-        ) {
-          throw new JsonLdError(
-            "Invalid JSON-LD syntax; invalid value of @embed.",
-            "jsonld.SyntaxError",
-            { code: "invalid @embed value", frame }
-          );
+        if ((flags.embed === "@first" || flags.embed === "@last") && state.is11) {
+          throw new JsonLdError("Invalid JSON-LD syntax; invalid value of @embed.", "jsonld.SyntaxError", { code: "invalid @embed value", frame });
         }
-        if (
-          !state.embedded &&
-          state.uniqueEmbeds[state.graph].hasOwnProperty(id)
-        ) {
+        if (!state.embedded && state.uniqueEmbeds[state.graph].hasOwnProperty(id)) {
           continue;
         }
-        if (
-          state.embedded &&
-          (flags.embed === "@never" ||
-            _createsCircularReference(subject, state.graph, state.subjectStack))
-        ) {
+        if (state.embedded && (flags.embed === "@never" || _createsCircularReference(subject, state.graph, state.subjectStack))) {
           _addFrameOutput(parent, property, output);
           continue;
         }
-        if (
-          state.embedded &&
-          (flags.embed == "@first" || flags.embed == "@once") &&
-          state.uniqueEmbeds[state.graph].hasOwnProperty(id)
-        ) {
+        if (state.embedded && (flags.embed == "@first" || flags.embed == "@once") && state.uniqueEmbeds[state.graph].hasOwnProperty(id)) {
           _addFrameOutput(parent, property, output);
           continue;
         }
@@ -4855,23 +3939,11 @@ var require_frame = __commonJS({
             }
           }
           if (recurse) {
-            api.frame(
-              { ...state, graph: id, embedded: false },
-              Object.keys(state.graphMap[id]).sort(),
-              [subframe],
-              output,
-              "@graph"
-            );
+            api.frame({ ...state, graph: id, embedded: false }, Object.keys(state.graphMap[id]).sort(), [subframe], output, "@graph");
           }
         }
         if ("@included" in frame) {
-          api.frame(
-            { ...state, embedded: false },
-            subjects,
-            frame["@included"],
-            output,
-            "@included"
-          );
+          api.frame({ ...state, embedded: false }, subjects, frame["@included"], output, "@included");
         }
         for (const prop of Object.keys(subject).sort()) {
           if (isKeyword(prop)) {
@@ -4879,9 +3951,7 @@ var require_frame = __commonJS({
             if (prop === "@type") {
               for (const type of subject["@type"]) {
                 if (type.indexOf("_:") === 0) {
-                  util.addValue(state.bnodeMap, type, output, {
-                    propertyIsArray: true,
-                  });
+                  util.addValue(state.bnodeMap, type, output, { propertyIsArray: true });
                 }
               }
             }
@@ -4891,37 +3961,21 @@ var require_frame = __commonJS({
             continue;
           }
           for (const o of subject[prop]) {
-            const subframe =
-              prop in frame ? frame[prop] : _createImplicitFrame(flags);
+            const subframe = prop in frame ? frame[prop] : _createImplicitFrame(flags);
             if (graphTypes.isList(o)) {
-              const subframe2 =
-                frame[prop] && frame[prop][0] && frame[prop][0]["@list"]
-                  ? frame[prop][0]["@list"]
-                  : _createImplicitFrame(flags);
+              const subframe2 = frame[prop] && frame[prop][0] && frame[prop][0]["@list"] ? frame[prop][0]["@list"] : _createImplicitFrame(flags);
               const list = { "@list": [] };
               _addFrameOutput(output, prop, list);
               const src = o["@list"];
               for (const oo of src) {
                 if (graphTypes.isSubjectReference(oo)) {
-                  api.frame(
-                    { ...state, embedded: true },
-                    [oo["@id"]],
-                    subframe2,
-                    list,
-                    "@list"
-                  );
+                  api.frame({ ...state, embedded: true }, [oo["@id"]], subframe2, list, "@list");
                 } else {
                   _addFrameOutput(list, "@list", util.clone(oo));
                 }
               }
             } else if (graphTypes.isSubjectReference(o)) {
-              api.frame(
-                { ...state, embedded: true },
-                [o["@id"]],
-                subframe,
-                output,
-                prop
-              );
+              api.frame({ ...state, embedded: true }, [o["@id"]], subframe, output, prop);
             } else if (_valueMatch(subframe[0], o)) {
               _addFrameOutput(output, prop, util.clone(o));
             }
@@ -4929,10 +3983,7 @@ var require_frame = __commonJS({
         }
         for (const prop of Object.keys(frame).sort()) {
           if (prop === "@type") {
-            if (
-              !types.isObject(frame[prop][0]) ||
-              !("@default" in frame[prop][0])
-            ) {
+            if (!types.isObject(frame[prop][0]) || !("@default" in frame[prop][0])) {
               continue;
             }
           } else if (isKeyword(prop)) {
@@ -4954,22 +4005,11 @@ var require_frame = __commonJS({
         for (const reverseProp of Object.keys(frame["@reverse"] || {}).sort()) {
           const subframe = frame["@reverse"][reverseProp];
           for (const subject2 of Object.keys(state.subjects)) {
-            const nodeValues = util.getValues(
-              state.subjects[subject2],
-              reverseProp
-            );
+            const nodeValues = util.getValues(state.subjects[subject2], reverseProp);
             if (nodeValues.some((v) => v["@id"] === id)) {
               output["@reverse"] = output["@reverse"] || {};
-              util.addValue(output["@reverse"], reverseProp, [], {
-                propertyIsArray: true,
-              });
-              api.frame(
-                { ...state, embedded: true },
-                [subject2],
-                subframe,
-                output["@reverse"][reverseProp],
-                property
-              );
+              util.addValue(output["@reverse"], reverseProp, [], { propertyIsArray: true });
+              api.frame({ ...state, embedded: true }, [subject2], subframe, output["@reverse"][reverseProp], property);
             }
           }
         }
@@ -5016,10 +4056,7 @@ var require_frame = __commonJS({
     function _createsCircularReference(subjectToEmbed, graph, subjectStack) {
       for (let i = subjectStack.length - 1; i >= 0; --i) {
         const subject = subjectStack[i];
-        if (
-          subject.graph === graph &&
-          subject.subject["@id"] === subjectToEmbed["@id"]
-        ) {
+        if (subject.graph === graph && subject.subject["@id"] === subjectToEmbed["@id"]) {
           return true;
         }
       }
@@ -5033,60 +4070,27 @@ var require_frame = __commonJS({
           rval = "@once";
         } else if (rval === false) {
           rval = "@never";
-        } else if (
-          rval !== "@always" &&
-          rval !== "@never" &&
-          rval !== "@link" &&
-          rval !== "@first" &&
-          rval !== "@last" &&
-          rval !== "@once"
-        ) {
-          throw new JsonLdError(
-            "Invalid JSON-LD syntax; invalid value of @embed.",
-            "jsonld.SyntaxError",
-            { code: "invalid @embed value", frame }
-          );
+        } else if (rval !== "@always" && rval !== "@never" && rval !== "@link" && rval !== "@first" && rval !== "@last" && rval !== "@once") {
+          throw new JsonLdError("Invalid JSON-LD syntax; invalid value of @embed.", "jsonld.SyntaxError", { code: "invalid @embed value", frame });
         }
       }
       return rval;
     }
     function _validateFrame(frame) {
-      if (
-        !types.isArray(frame) ||
-        frame.length !== 1 ||
-        !types.isObject(frame[0])
-      ) {
-        throw new JsonLdError(
-          "Invalid JSON-LD syntax; a JSON-LD frame must be a single object.",
-          "jsonld.SyntaxError",
-          { frame }
-        );
+      if (!types.isArray(frame) || frame.length !== 1 || !types.isObject(frame[0])) {
+        throw new JsonLdError("Invalid JSON-LD syntax; a JSON-LD frame must be a single object.", "jsonld.SyntaxError", { frame });
       }
       if ("@id" in frame[0]) {
         for (const id of util.asArray(frame[0]["@id"])) {
-          if (
-            !(types.isObject(id) || url.isAbsolute(id)) ||
-            (types.isString(id) && id.indexOf("_:") === 0)
-          ) {
-            throw new JsonLdError(
-              "Invalid JSON-LD syntax; invalid @id in frame.",
-              "jsonld.SyntaxError",
-              { code: "invalid frame", frame }
-            );
+          if (!(types.isObject(id) || url.isAbsolute(id)) || types.isString(id) && id.indexOf("_:") === 0) {
+            throw new JsonLdError("Invalid JSON-LD syntax; invalid @id in frame.", "jsonld.SyntaxError", { code: "invalid frame", frame });
           }
         }
       }
       if ("@type" in frame[0]) {
         for (const type of util.asArray(frame[0]["@type"])) {
-          if (
-            !(types.isObject(type) || url.isAbsolute(type)) ||
-            (types.isString(type) && type.indexOf("_:") === 0)
-          ) {
-            throw new JsonLdError(
-              "Invalid JSON-LD syntax; invalid @type in frame.",
-              "jsonld.SyntaxError",
-              { code: "invalid frame", frame }
-            );
+          if (!(types.isObject(type) || url.isAbsolute(type)) || types.isString(type) && type.indexOf("_:") === 0) {
+            throw new JsonLdError("Invalid JSON-LD syntax; invalid @type in frame.", "jsonld.SyntaxError", { code: "invalid frame", frame });
           }
         }
       }
@@ -5124,10 +4128,7 @@ var require_frame = __commonJS({
               return false;
             }
             matchThis = true;
-          } else if (
-            frame["@type"].length === 1 &&
-            types.isEmptyObject(frame["@type"][0])
-          ) {
+          } else if (frame["@type"].length === 1 && types.isEmptyObject(frame["@type"][0])) {
             matchThis = nodeValues.length > 0;
           } else {
             for (const type of frame["@type"]) {
@@ -5168,24 +4169,15 @@ var require_frame = __commonJS({
               if (graphTypes.isList(nodeValues[0])) {
                 const nodeListValues = nodeValues[0]["@list"];
                 if (graphTypes.isValue(listValue)) {
-                  matchThis = nodeListValues.some((lv) =>
-                    _valueMatch(listValue, lv)
-                  );
-                } else if (
-                  graphTypes.isSubject(listValue) ||
-                  graphTypes.isSubjectReference(listValue)
-                ) {
-                  matchThis = nodeListValues.some((lv) =>
-                    _nodeMatch(state, listValue, lv, flags)
-                  );
+                  matchThis = nodeListValues.some((lv) => _valueMatch(listValue, lv));
+                } else if (graphTypes.isSubject(listValue) || graphTypes.isSubjectReference(listValue)) {
+                  matchThis = nodeListValues.some((lv) => _nodeMatch(state, listValue, lv, flags));
                 }
               }
             } else if (graphTypes.isValue(thisFrame)) {
               matchThis = nodeValues.some((nv) => _valueMatch(thisFrame, nv));
             } else if (graphTypes.isSubjectReference(thisFrame)) {
-              matchThis = nodeValues.some((nv) =>
-                _nodeMatch(state, thisFrame, nv, flags)
-              );
+              matchThis = nodeValues.some((nv) => _nodeMatch(state, thisFrame, nv, flags));
             } else if (types.isObject(thisFrame)) {
               matchThis = nodeValues.length > 0;
             } else {
@@ -5215,19 +4207,13 @@ var require_frame = __commonJS({
         }
       } else {
         const useArray = types.isArray(parent[property]);
-        util.removeValue(parent, property, subject, {
-          propertyIsArray: useArray,
-        });
+        util.removeValue(parent, property, subject, { propertyIsArray: useArray });
         util.addValue(parent, property, subject, { propertyIsArray: useArray });
       }
       const removeDependents = (id2) => {
         const ids = Object.keys(embeds);
         for (const next of ids) {
-          if (
-            next in embeds &&
-            types.isObject(embeds[next].parent) &&
-            embeds[next].parent["@id"] === id2
-          ) {
+          if (next in embeds && types.isObject(embeds[next].parent) && embeds[next].parent["@id"] === id2) {
             delete embeds[next];
             removeDependents(next);
           }
@@ -5290,48 +4276,24 @@ var require_frame = __commonJS({
       const v1 = value["@value"];
       const t1 = value["@type"];
       const l1 = value["@language"];
-      const v2 = pattern["@value"]
-        ? types.isArray(pattern["@value"])
-          ? pattern["@value"]
-          : [pattern["@value"]]
-        : [];
-      const t2 = pattern["@type"]
-        ? types.isArray(pattern["@type"])
-          ? pattern["@type"]
-          : [pattern["@type"]]
-        : [];
-      const l2 = pattern["@language"]
-        ? types.isArray(pattern["@language"])
-          ? pattern["@language"]
-          : [pattern["@language"]]
-        : [];
+      const v2 = pattern["@value"] ? types.isArray(pattern["@value"]) ? pattern["@value"] : [pattern["@value"]] : [];
+      const t2 = pattern["@type"] ? types.isArray(pattern["@type"]) ? pattern["@type"] : [pattern["@type"]] : [];
+      const l2 = pattern["@language"] ? types.isArray(pattern["@language"]) ? pattern["@language"] : [pattern["@language"]] : [];
       if (v2.length === 0 && t2.length === 0 && l2.length === 0) {
         return true;
       }
       if (!(v2.includes(v1) || types.isEmptyObject(v2[0]))) {
         return false;
       }
-      if (
-        !(
-          (!t1 && t2.length === 0) ||
-          t2.includes(t1) ||
-          (t1 && types.isEmptyObject(t2[0]))
-        )
-      ) {
+      if (!(!t1 && t2.length === 0 || t2.includes(t1) || t1 && types.isEmptyObject(t2[0]))) {
         return false;
       }
-      if (
-        !(
-          (!l1 && l2.length === 0) ||
-          l2.includes(l1) ||
-          (l1 && types.isEmptyObject(l2[0]))
-        )
-      ) {
+      if (!(!l1 && l2.length === 0 || l2.includes(l1) || l1 && types.isEmptyObject(l2[0]))) {
         return false;
       }
       return true;
     }
-  },
+  }
 });
 
 // lib/compact.js
@@ -5343,27 +4305,30 @@ var require_compact = __commonJS({
       isArray: _isArray,
       isObject: _isObject,
       isString: _isString,
-      isUndefined: _isUndefined,
+      isUndefined: _isUndefined
     } = require_types();
     var {
       isList: _isList,
       isValue: _isValue,
       isGraph: _isGraph,
       isSimpleGraph: _isSimpleGraph,
-      isSubjectReference: _isSubjectReference,
+      isSubjectReference: _isSubjectReference
     } = require_graphTypes();
     var {
       expandIri: _expandIri,
       getContextValue: _getContextValue,
       isKeyword: _isKeyword,
       process: _processContext,
-      processingMode: _processingMode,
+      processingMode: _processingMode
     } = require_context();
-    var { removeBase: _removeBase, prependBase: _prependBase } = require_url();
+    var {
+      removeBase: _removeBase,
+      prependBase: _prependBase
+    } = require_url();
     var {
       addValue: _addValue,
       asArray: _asArray,
-      compareShortestLeast: _compareShortestLeast,
+      compareShortestLeast: _compareShortestLeast
     } = require_util();
     var api = {};
     module.exports = api;
@@ -5372,7 +4337,7 @@ var require_compact = __commonJS({
       activeProperty = null,
       element,
       options = {},
-      compactionMap = () => void 0,
+      compactionMap = () => void 0
     }) => {
       if (_isArray(element)) {
         let rval = [];
@@ -5382,7 +4347,7 @@ var require_compact = __commonJS({
             activeProperty,
             element: element[i],
             options,
-            compactionMap,
+            compactionMap
           });
           if (compacted === null) {
             compacted = await compactionMap({
@@ -5391,7 +4356,7 @@ var require_compact = __commonJS({
               activeProperty,
               parent: element,
               index: i,
-              options,
+              options
             });
             if (compacted === void 0) {
               continue;
@@ -5400,8 +4365,7 @@ var require_compact = __commonJS({
           rval.push(compacted);
         }
         if (options.compactArrays && rval.length === 1) {
-          const container =
-            _getContextValue(activeCtx, activeProperty, "@container") || [];
+          const container = _getContextValue(activeCtx, activeProperty, "@container") || [];
           if (container.length === 0) {
             rval = rval[0];
           }
@@ -5415,15 +4379,11 @@ var require_compact = __commonJS({
           localCtx: ctx,
           propagate: true,
           overrideProtected: true,
-          options,
+          options
         });
       }
       if (_isObject(element)) {
-        if (
-          options.link &&
-          "@id" in element &&
-          options.link.hasOwnProperty(element["@id"])
-        ) {
+        if (options.link && "@id" in element && options.link.hasOwnProperty(element["@id"])) {
           const linked = options.link[element["@id"]];
           for (let i = 0; i < linked.length; ++i) {
             if (linked[i].expanded === element) {
@@ -5432,33 +4392,24 @@ var require_compact = __commonJS({
           }
         }
         if (_isValue(element) || _isSubjectReference(element)) {
-          const rval2 = api.compactValue({
-            activeCtx,
-            activeProperty,
-            value: element,
-            options,
-          });
+          const rval2 = api.compactValue({ activeCtx, activeProperty, value: element, options });
           if (options.link && _isSubjectReference(element)) {
             if (!options.link.hasOwnProperty(element["@id"])) {
               options.link[element["@id"]] = [];
             }
-            options.link[element["@id"]].push({
-              expanded: element,
-              compacted: rval2,
-            });
+            options.link[element["@id"]].push({ expanded: element, compacted: rval2 });
           }
           return rval2;
         }
         if (_isList(element)) {
-          const container =
-            _getContextValue(activeCtx, activeProperty, "@container") || [];
+          const container = _getContextValue(activeCtx, activeProperty, "@container") || [];
           if (container.includes("@list")) {
             return api.compact({
               activeCtx,
               activeProperty,
               element: element["@list"],
               options,
-              compactionMap,
+              compactionMap
             });
           }
         }
@@ -5468,28 +4419,21 @@ var require_compact = __commonJS({
         if (!_isValue(element) && !_isSubjectReference(element)) {
           activeCtx = activeCtx.revertToPreviousContext();
         }
-        const propertyScopedCtx = _getContextValue(
-          inputCtx,
-          activeProperty,
-          "@context"
-        );
+        const propertyScopedCtx = _getContextValue(inputCtx, activeProperty, "@context");
         if (!_isUndefined(propertyScopedCtx)) {
           activeCtx = await _processContext({
             activeCtx,
             localCtx: propertyScopedCtx,
             propagate: true,
             overrideProtected: true,
-            options,
+            options
           });
         }
         if (options.link && "@id" in element) {
           if (!options.link.hasOwnProperty(element["@id"])) {
             options.link[element["@id"]] = [];
           }
-          options.link[element["@id"]].push({
-            expanded: element,
-            compacted: rval,
-          });
+          options.link[element["@id"]].push({ expanded: element, compacted: rval });
         }
         let types = element["@type"] || [];
         if (types.length > 1) {
@@ -5497,18 +4441,14 @@ var require_compact = __commonJS({
         }
         const typeContext = activeCtx;
         for (const type of types) {
-          const compactedType = api.compactIri({
-            activeCtx: typeContext,
-            iri: type,
-            relativeTo: { vocab: true },
-          });
+          const compactedType = api.compactIri({ activeCtx: typeContext, iri: type, relativeTo: { vocab: true } });
           const ctx2 = _getContextValue(inputCtx, compactedType, "@context");
           if (!_isUndefined(ctx2)) {
             activeCtx = await _processContext({
               activeCtx,
               localCtx: ctx2,
               options,
-              propagate: false,
+              propagate: false
             });
           }
         }
@@ -5516,51 +4456,33 @@ var require_compact = __commonJS({
         for (const expandedProperty of keys) {
           const expandedValue = element[expandedProperty];
           if (expandedProperty === "@id") {
-            let compactedValue = _asArray(expandedValue).map((expandedIri) =>
-              api.compactIri({
-                activeCtx,
-                iri: expandedIri,
-                relativeTo: { vocab: false },
-                base: options.base,
-              })
-            );
+            let compactedValue = _asArray(expandedValue).map((expandedIri) => api.compactIri({
+              activeCtx,
+              iri: expandedIri,
+              relativeTo: { vocab: false },
+              base: options.base
+            }));
             if (compactedValue.length === 1) {
               compactedValue = compactedValue[0];
             }
-            const alias = api.compactIri({
-              activeCtx,
-              iri: "@id",
-              relativeTo: { vocab: true },
-            });
+            const alias = api.compactIri({ activeCtx, iri: "@id", relativeTo: { vocab: true } });
             rval[alias] = compactedValue;
             continue;
           }
           if (expandedProperty === "@type") {
-            let compactedValue = _asArray(expandedValue).map((expandedIri) =>
-              api.compactIri({
-                activeCtx: inputCtx,
-                iri: expandedIri,
-                relativeTo: { vocab: true },
-              })
-            );
+            let compactedValue = _asArray(expandedValue).map((expandedIri) => api.compactIri({
+              activeCtx: inputCtx,
+              iri: expandedIri,
+              relativeTo: { vocab: true }
+            }));
             if (compactedValue.length === 1) {
               compactedValue = compactedValue[0];
             }
-            const alias = api.compactIri({
-              activeCtx,
-              iri: "@type",
-              relativeTo: { vocab: true },
-            });
-            const container =
-              _getContextValue(activeCtx, alias, "@container") || [];
-            const typeAsSet =
-              container.includes("@set") && _processingMode(activeCtx, 1.1);
-            const isArray =
-              typeAsSet ||
-              (_isArray(compactedValue) && expandedValue.length === 0);
-            _addValue(rval, alias, compactedValue, {
-              propertyIsArray: isArray,
-            });
+            const alias = api.compactIri({ activeCtx, iri: "@type", relativeTo: { vocab: true } });
+            const container = _getContextValue(activeCtx, alias, "@container") || [];
+            const typeAsSet = container.includes("@set") && _processingMode(activeCtx, 1.1);
+            const isArray = typeAsSet || _isArray(compactedValue) && expandedValue.length === 0;
+            _addValue(rval, alias, compactedValue, { propertyIsArray: isArray });
             continue;
           }
           if (expandedProperty === "@reverse") {
@@ -5569,25 +4491,14 @@ var require_compact = __commonJS({
               activeProperty: "@reverse",
               element: expandedValue,
               options,
-              compactionMap,
+              compactionMap
             });
             for (const compactedProperty in compactedValue) {
-              if (
-                activeCtx.mappings.has(compactedProperty) &&
-                activeCtx.mappings.get(compactedProperty).reverse
-              ) {
+              if (activeCtx.mappings.has(compactedProperty) && activeCtx.mappings.get(compactedProperty).reverse) {
                 const value = compactedValue[compactedProperty];
-                const container =
-                  _getContextValue(
-                    activeCtx,
-                    compactedProperty,
-                    "@container"
-                  ) || [];
-                const useArray =
-                  container.includes("@set") || !options.compactArrays;
-                _addValue(rval, compactedProperty, value, {
-                  propertyIsArray: useArray,
-                });
+                const container = _getContextValue(activeCtx, compactedProperty, "@container") || [];
+                const useArray = container.includes("@set") || !options.compactArrays;
+                _addValue(rval, compactedProperty, value, { propertyIsArray: useArray });
                 delete compactedValue[compactedProperty];
               }
             }
@@ -5595,7 +4506,7 @@ var require_compact = __commonJS({
               const alias = api.compactIri({
                 activeCtx,
                 iri: expandedProperty,
-                relativeTo: { vocab: true },
+                relativeTo: { vocab: true }
               });
               _addValue(rval, alias, compactedValue);
             }
@@ -5607,7 +4518,7 @@ var require_compact = __commonJS({
               activeProperty,
               element: expandedValue,
               options,
-              compactionMap,
+              compactionMap
             });
             if (!(_isArray(compactedValue) && compactedValue.length === 0)) {
               _addValue(rval, expandedProperty, compactedValue);
@@ -5615,38 +4526,29 @@ var require_compact = __commonJS({
             continue;
           }
           if (expandedProperty === "@index") {
-            const container =
-              _getContextValue(activeCtx, activeProperty, "@container") || [];
+            const container = _getContextValue(activeCtx, activeProperty, "@container") || [];
             if (container.includes("@index")) {
               continue;
             }
             const alias = api.compactIri({
               activeCtx,
               iri: expandedProperty,
-              relativeTo: { vocab: true },
+              relativeTo: { vocab: true }
             });
             _addValue(rval, alias, expandedValue);
             continue;
           }
-          if (
-            expandedProperty !== "@graph" &&
-            expandedProperty !== "@list" &&
-            expandedProperty !== "@included" &&
-            _isKeyword(expandedProperty)
-          ) {
+          if (expandedProperty !== "@graph" && expandedProperty !== "@list" && expandedProperty !== "@included" && _isKeyword(expandedProperty)) {
             const alias = api.compactIri({
               activeCtx,
               iri: expandedProperty,
-              relativeTo: { vocab: true },
+              relativeTo: { vocab: true }
             });
             _addValue(rval, alias, expandedValue);
             continue;
           }
           if (!_isArray(expandedValue)) {
-            throw new JsonLdError(
-              "JSON-LD expansion error; expanded value must be an array.",
-              "jsonld.SyntaxError"
-            );
+            throw new JsonLdError("JSON-LD expansion error; expanded value must be an array.", "jsonld.SyntaxError");
           }
           if (expandedValue.length === 0) {
             const itemActiveProperty = api.compactIri({
@@ -5654,11 +4556,9 @@ var require_compact = __commonJS({
               iri: expandedProperty,
               value: expandedValue,
               relativeTo: { vocab: true },
-              reverse: insideReverse,
+              reverse: insideReverse
             });
-            const nestProperty = activeCtx.mappings.has(itemActiveProperty)
-              ? activeCtx.mappings.get(itemActiveProperty)["@nest"]
-              : null;
+            const nestProperty = activeCtx.mappings.has(itemActiveProperty) ? activeCtx.mappings.get(itemActiveProperty)["@nest"] : null;
             let nestResult = rval;
             if (nestProperty) {
               _checkNestProperty(activeCtx, nestProperty, options);
@@ -5668,7 +4568,7 @@ var require_compact = __commonJS({
               nestResult = rval[nestProperty];
             }
             _addValue(nestResult, itemActiveProperty, expandedValue, {
-              propertyIsArray: true,
+              propertyIsArray: true
             });
           }
           for (const expandedItem of expandedValue) {
@@ -5677,11 +4577,9 @@ var require_compact = __commonJS({
               iri: expandedProperty,
               value: expandedItem,
               relativeTo: { vocab: true },
-              reverse: insideReverse,
+              reverse: insideReverse
             });
-            const nestProperty = activeCtx.mappings.has(itemActiveProperty)
-              ? activeCtx.mappings.get(itemActiveProperty)["@nest"]
-              : null;
+            const nestProperty = activeCtx.mappings.has(itemActiveProperty) ? activeCtx.mappings.get(itemActiveProperty)["@nest"] : null;
             let nestResult = rval;
             if (nestProperty) {
               _checkNestProperty(activeCtx, nestProperty, options);
@@ -5690,9 +4588,7 @@ var require_compact = __commonJS({
               }
               nestResult = rval[nestProperty];
             }
-            const container =
-              _getContextValue(activeCtx, itemActiveProperty, "@container") ||
-              [];
+            const container = _getContextValue(activeCtx, itemActiveProperty, "@container") || [];
             const isGraph = _isGraph(expandedItem);
             const isList = _isList(expandedItem);
             let inner;
@@ -5706,7 +4602,7 @@ var require_compact = __commonJS({
               activeProperty: itemActiveProperty,
               element: isList || isGraph ? inner : expandedItem,
               options,
-              compactionMap,
+              compactionMap
             });
             if (isList) {
               if (!_isArray(compactedItem)) {
@@ -5717,107 +4613,77 @@ var require_compact = __commonJS({
                   [api.compactIri({
                     activeCtx,
                     iri: "@list",
-                    relativeTo: { vocab: true },
-                  })]: compactedItem,
+                    relativeTo: { vocab: true }
+                  })]: compactedItem
                 };
                 if ("@index" in expandedItem) {
-                  compactedItem[
-                    api.compactIri({
-                      activeCtx,
-                      iri: "@index",
-                      relativeTo: { vocab: true },
-                    })
-                  ] = expandedItem["@index"];
+                  compactedItem[api.compactIri({
+                    activeCtx,
+                    iri: "@index",
+                    relativeTo: { vocab: true }
+                  })] = expandedItem["@index"];
                 }
               } else {
                 _addValue(nestResult, itemActiveProperty, compactedItem, {
                   valueIsArray: true,
-                  allowDuplicate: true,
+                  allowDuplicate: true
                 });
                 continue;
               }
             }
             if (isGraph) {
-              if (
-                container.includes("@graph") &&
-                (container.includes("@id") ||
-                  (container.includes("@index") &&
-                    _isSimpleGraph(expandedItem)))
-              ) {
+              if (container.includes("@graph") && (container.includes("@id") || container.includes("@index") && _isSimpleGraph(expandedItem))) {
                 let mapObject;
                 if (nestResult.hasOwnProperty(itemActiveProperty)) {
                   mapObject = nestResult[itemActiveProperty];
                 } else {
                   nestResult[itemActiveProperty] = mapObject = {};
                 }
-                const key =
-                  (container.includes("@id")
-                    ? expandedItem["@id"]
-                    : expandedItem["@index"]) ||
-                  api.compactIri({
-                    activeCtx,
-                    iri: "@none",
-                    relativeTo: { vocab: true },
-                  });
-                _addValue(mapObject, key, compactedItem, {
-                  propertyIsArray:
-                    !options.compactArrays || container.includes("@set"),
+                const key = (container.includes("@id") ? expandedItem["@id"] : expandedItem["@index"]) || api.compactIri({
+                  activeCtx,
+                  iri: "@none",
+                  relativeTo: { vocab: true }
                 });
-              } else if (
-                container.includes("@graph") &&
-                _isSimpleGraph(expandedItem)
-              ) {
+                _addValue(mapObject, key, compactedItem, {
+                  propertyIsArray: !options.compactArrays || container.includes("@set")
+                });
+              } else if (container.includes("@graph") && _isSimpleGraph(expandedItem)) {
                 if (_isArray(compactedItem) && compactedItem.length > 1) {
                   compactedItem = { "@included": compactedItem };
                 }
                 _addValue(nestResult, itemActiveProperty, compactedItem, {
-                  propertyIsArray:
-                    !options.compactArrays || container.includes("@set"),
+                  propertyIsArray: !options.compactArrays || container.includes("@set")
                 });
               } else {
-                if (
-                  _isArray(compactedItem) &&
-                  compactedItem.length === 1 &&
-                  options.compactArrays
-                ) {
+                if (_isArray(compactedItem) && compactedItem.length === 1 && options.compactArrays) {
                   compactedItem = compactedItem[0];
                 }
                 compactedItem = {
                   [api.compactIri({
                     activeCtx,
                     iri: "@graph",
-                    relativeTo: { vocab: true },
-                  })]: compactedItem,
+                    relativeTo: { vocab: true }
+                  })]: compactedItem
                 };
                 if ("@id" in expandedItem) {
-                  compactedItem[
-                    api.compactIri({
-                      activeCtx,
-                      iri: "@id",
-                      relativeTo: { vocab: true },
-                    })
-                  ] = expandedItem["@id"];
+                  compactedItem[api.compactIri({
+                    activeCtx,
+                    iri: "@id",
+                    relativeTo: { vocab: true }
+                  })] = expandedItem["@id"];
                 }
                 if ("@index" in expandedItem) {
-                  compactedItem[
-                    api.compactIri({
-                      activeCtx,
-                      iri: "@index",
-                      relativeTo: { vocab: true },
-                    })
-                  ] = expandedItem["@index"];
+                  compactedItem[api.compactIri({
+                    activeCtx,
+                    iri: "@index",
+                    relativeTo: { vocab: true }
+                  })] = expandedItem["@index"];
                 }
                 _addValue(nestResult, itemActiveProperty, compactedItem, {
-                  propertyIsArray:
-                    !options.compactArrays || container.includes("@set"),
+                  propertyIsArray: !options.compactArrays || container.includes("@set")
                 });
               }
-            } else if (
-              container.includes("@language") ||
-              container.includes("@index") ||
-              container.includes("@id") ||
-              container.includes("@type")
-            ) {
+            } else if (container.includes("@language") || container.includes("@index") || container.includes("@id") || container.includes("@type")) {
               let mapObject;
               if (nestResult.hasOwnProperty(itemActiveProperty)) {
                 mapObject = nestResult[itemActiveProperty];
@@ -5831,14 +4697,8 @@ var require_compact = __commonJS({
                 }
                 key = expandedItem["@language"];
               } else if (container.includes("@index")) {
-                const indexKey =
-                  _getContextValue(activeCtx, itemActiveProperty, "@index") ||
-                  "@index";
-                const containerKey = api.compactIri({
-                  activeCtx,
-                  iri: indexKey,
-                  relativeTo: { vocab: true },
-                });
+                const indexKey = _getContextValue(activeCtx, itemActiveProperty, "@index") || "@index";
+                const containerKey = api.compactIri({ activeCtx, iri: indexKey, relativeTo: { vocab: true } });
                 if (indexKey === "@index") {
                   key = expandedItem["@index"];
                   delete compactedItem[containerKey];
@@ -5865,7 +4725,7 @@ var require_compact = __commonJS({
                 const idKey = api.compactIri({
                   activeCtx,
                   iri: "@id",
-                  relativeTo: { vocab: true },
+                  relativeTo: { vocab: true }
                 });
                 key = compactedItem[idKey];
                 delete compactedItem[idKey];
@@ -5873,7 +4733,7 @@ var require_compact = __commonJS({
                 const typeKey = api.compactIri({
                   activeCtx,
                   iri: "@type",
-                  relativeTo: { vocab: true },
+                  relativeTo: { vocab: true }
                 });
                 let types2;
                 [key, ...types2] = _asArray(compactedItem[typeKey] || []);
@@ -5888,16 +4748,13 @@ var require_compact = __commonJS({
                     compactedItem[typeKey] = types2;
                     break;
                 }
-                if (
-                  Object.keys(compactedItem).length === 1 &&
-                  "@id" in expandedItem
-                ) {
+                if (Object.keys(compactedItem).length === 1 && "@id" in expandedItem) {
                   compactedItem = await api.compact({
                     activeCtx,
                     activeProperty: itemActiveProperty,
                     element: { "@id": expandedItem["@id"] },
                     options,
-                    compactionMap,
+                    compactionMap
                   });
                 }
               }
@@ -5905,23 +4762,15 @@ var require_compact = __commonJS({
                 key = api.compactIri({
                   activeCtx,
                   iri: "@none",
-                  relativeTo: { vocab: true },
+                  relativeTo: { vocab: true }
                 });
               }
               _addValue(mapObject, key, compactedItem, {
-                propertyIsArray: container.includes("@set"),
+                propertyIsArray: container.includes("@set")
               });
             } else {
-              const isArray =
-                !options.compactArrays ||
-                container.includes("@set") ||
-                container.includes("@list") ||
-                (_isArray(compactedItem) && compactedItem.length === 0) ||
-                expandedProperty === "@list" ||
-                expandedProperty === "@graph";
-              _addValue(nestResult, itemActiveProperty, compactedItem, {
-                propertyIsArray: isArray,
-              });
+              const isArray = !options.compactArrays || container.includes("@set") || container.includes("@list") || _isArray(compactedItem) && compactedItem.length === 0 || expandedProperty === "@list" || expandedProperty === "@graph";
+              _addValue(nestResult, itemActiveProperty, compactedItem, { propertyIsArray: isArray });
             }
           }
         }
@@ -5935,7 +4784,7 @@ var require_compact = __commonJS({
       value = null,
       relativeTo = { vocab: false },
       reverse = false,
-      base = null,
+      base = null
     }) => {
       if (iri === null) {
         return iri;
@@ -5944,13 +4793,7 @@ var require_compact = __commonJS({
         activeCtx = activeCtx.previousContext;
       }
       const inverseCtx = activeCtx.getInverse();
-      if (
-        _isKeyword(iri) &&
-        iri in inverseCtx &&
-        "@none" in inverseCtx[iri] &&
-        "@type" in inverseCtx[iri]["@none"] &&
-        "@none" in inverseCtx[iri]["@none"]["@type"]
-      ) {
+      if (_isKeyword(iri) && iri in inverseCtx && "@none" in inverseCtx[iri] && "@type" in inverseCtx[iri]["@none"] && "@none" in inverseCtx[iri]["@none"]["@type"]) {
         return inverseCtx[iri]["@none"]["@type"]["@none"];
       }
       if (relativeTo.vocab && iri in inverseCtx) {
@@ -5964,24 +4807,14 @@ var require_compact = __commonJS({
         }
         if (_isGraph(value)) {
           if ("@index" in value) {
-            containers.push(
-              "@graph@index",
-              "@graph@index@set",
-              "@index",
-              "@index@set"
-            );
+            containers.push("@graph@index", "@graph@index@set", "@index", "@index@set");
           }
           if ("@id" in value) {
             containers.push("@graph@id", "@graph@id@set");
           }
           containers.push("@graph", "@graph@set", "@set");
           if (!("@index" in value)) {
-            containers.push(
-              "@graph@index",
-              "@graph@index@set",
-              "@index",
-              "@index@set"
-            );
+            containers.push("@graph@index", "@graph@index@set", "@index", "@index@set");
           }
           if (!("@id" in value)) {
             containers.push("@graph@id", "@graph@id@set");
@@ -6076,14 +4909,7 @@ var require_compact = __commonJS({
         if (_isValue(value) && Object.keys(value).length === 1) {
           containers.push("@language", "@language@set");
         }
-        const term = _selectTerm(
-          activeCtx,
-          iri,
-          value,
-          containers,
-          typeOrLanguage,
-          typeOrLanguageValue
-        );
+        const term = _selectTerm(activeCtx, iri, value, containers, typeOrLanguage, typeOrLanguageValue);
         if (term !== null) {
           return term;
         }
@@ -6114,14 +4940,8 @@ var require_compact = __commonJS({
         const terms = entry.terms;
         for (const term of terms) {
           const curie = term + ":" + iri.substr(entry.iri.length);
-          const isUsableCurie =
-            activeCtx.mappings.get(term)._prefix &&
-            (!activeCtx.mappings.has(curie) ||
-              (value === null && activeCtx.mappings.get(curie)["@id"] === iri));
-          if (
-            isUsableCurie &&
-            (choice === null || _compareShortestLeast(curie, choice) < 0)
-          ) {
+          const isUsableCurie = activeCtx.mappings.get(term)._prefix && (!activeCtx.mappings.has(curie) || value === null && activeCtx.mappings.get(curie)["@id"] === iri);
+          if (isUsableCurie && (choice === null || _compareShortestLeast(curie, choice) < 0)) {
             choice = curie;
           }
         }
@@ -6131,11 +4951,7 @@ var require_compact = __commonJS({
       }
       for (const [term, td] of activeCtx.mappings) {
         if (td && td._prefix && iri.startsWith(term + ":")) {
-          throw new JsonLdError(
-            `Absolute IRI "${iri}" confused with prefix "${term}".`,
-            "jsonld.SyntaxError",
-            { code: "IRI confused with prefix", context: activeCtx }
-          );
+          throw new JsonLdError(`Absolute IRI "${iri}" confused with prefix "${term}".`, "jsonld.SyntaxError", { code: "IRI confused with prefix", context: activeCtx });
         }
       }
       if (!relativeTo.vocab) {
@@ -6154,30 +4970,15 @@ var require_compact = __commonJS({
     api.compactValue = ({ activeCtx, activeProperty, value, options }) => {
       if (_isValue(value)) {
         const type2 = _getContextValue(activeCtx, activeProperty, "@type");
-        const language = _getContextValue(
-          activeCtx,
-          activeProperty,
-          "@language"
-        );
-        const direction = _getContextValue(
-          activeCtx,
-          activeProperty,
-          "@direction"
-        );
-        const container =
-          _getContextValue(activeCtx, activeProperty, "@container") || [];
-        const preserveIndex =
-          "@index" in value && !container.includes("@index");
+        const language = _getContextValue(activeCtx, activeProperty, "@language");
+        const direction = _getContextValue(activeCtx, activeProperty, "@direction");
+        const container = _getContextValue(activeCtx, activeProperty, "@container") || [];
+        const preserveIndex = "@index" in value && !container.includes("@index");
         if (!preserveIndex && type2 !== "@none") {
           if (value["@type"] === type2) {
             return value["@value"];
           }
-          if (
-            "@language" in value &&
-            value["@language"] === language &&
-            "@direction" in value &&
-            value["@direction"] === direction
-          ) {
+          if ("@language" in value && value["@language"] === language && "@direction" in value && value["@direction"] === direction) {
             return value["@value"];
           }
           if ("@language" in value && value["@language"] === language) {
@@ -6188,128 +4989,78 @@ var require_compact = __commonJS({
           }
         }
         const keyCount = Object.keys(value).length;
-        const isValueOnlyKey =
-          keyCount === 1 ||
-          (keyCount === 2 && "@index" in value && !preserveIndex);
+        const isValueOnlyKey = keyCount === 1 || keyCount === 2 && "@index" in value && !preserveIndex;
         const hasDefaultLanguage = "@language" in activeCtx;
         const isValueString = _isString(value["@value"]);
-        const hasNullMapping =
-          activeCtx.mappings.has(activeProperty) &&
-          activeCtx.mappings.get(activeProperty)["@language"] === null;
-        if (
-          isValueOnlyKey &&
-          type2 !== "@none" &&
-          (!hasDefaultLanguage || !isValueString || hasNullMapping)
-        ) {
+        const hasNullMapping = activeCtx.mappings.has(activeProperty) && activeCtx.mappings.get(activeProperty)["@language"] === null;
+        if (isValueOnlyKey && type2 !== "@none" && (!hasDefaultLanguage || !isValueString || hasNullMapping)) {
           return value["@value"];
         }
         const rval = {};
         if (preserveIndex) {
-          rval[
-            api.compactIri({
-              activeCtx,
-              iri: "@index",
-              relativeTo: { vocab: true },
-            })
-          ] = value["@index"];
+          rval[api.compactIri({
+            activeCtx,
+            iri: "@index",
+            relativeTo: { vocab: true }
+          })] = value["@index"];
         }
         if ("@type" in value) {
-          rval[
-            api.compactIri({
-              activeCtx,
-              iri: "@type",
-              relativeTo: { vocab: true },
-            })
-          ] = api.compactIri({
+          rval[api.compactIri({
             activeCtx,
-            iri: value["@type"],
-            relativeTo: { vocab: true },
-          });
+            iri: "@type",
+            relativeTo: { vocab: true }
+          })] = api.compactIri({ activeCtx, iri: value["@type"], relativeTo: { vocab: true } });
         } else if ("@language" in value) {
-          rval[
-            api.compactIri({
-              activeCtx,
-              iri: "@language",
-              relativeTo: { vocab: true },
-            })
-          ] = value["@language"];
+          rval[api.compactIri({
+            activeCtx,
+            iri: "@language",
+            relativeTo: { vocab: true }
+          })] = value["@language"];
         }
         if ("@direction" in value) {
-          rval[
-            api.compactIri({
-              activeCtx,
-              iri: "@direction",
-              relativeTo: { vocab: true },
-            })
-          ] = value["@direction"];
-        }
-        rval[
-          api.compactIri({
+          rval[api.compactIri({
             activeCtx,
-            iri: "@value",
-            relativeTo: { vocab: true },
-          })
-        ] = value["@value"];
+            iri: "@direction",
+            relativeTo: { vocab: true }
+          })] = value["@direction"];
+        }
+        rval[api.compactIri({
+          activeCtx,
+          iri: "@value",
+          relativeTo: { vocab: true }
+        })] = value["@value"];
         return rval;
       }
-      const expandedProperty = _expandIri(
-        activeCtx,
-        activeProperty,
-        { vocab: true },
-        options
-      );
+      const expandedProperty = _expandIri(activeCtx, activeProperty, { vocab: true }, options);
       const type = _getContextValue(activeCtx, activeProperty, "@type");
       const compacted = api.compactIri({
         activeCtx,
         iri: value["@id"],
         relativeTo: { vocab: type === "@vocab" },
-        base: options.base,
+        base: options.base
       });
-      if (
-        type === "@id" ||
-        type === "@vocab" ||
-        expandedProperty === "@graph"
-      ) {
+      if (type === "@id" || type === "@vocab" || expandedProperty === "@graph") {
         return compacted;
       }
       return {
         [api.compactIri({
           activeCtx,
           iri: "@id",
-          relativeTo: { vocab: true },
-        })]: compacted,
+          relativeTo: { vocab: true }
+        })]: compacted
       };
     };
-    function _selectTerm(
-      activeCtx,
-      iri,
-      value,
-      containers,
-      typeOrLanguage,
-      typeOrLanguageValue
-    ) {
+    function _selectTerm(activeCtx, iri, value, containers, typeOrLanguage, typeOrLanguageValue) {
       if (typeOrLanguageValue === null) {
         typeOrLanguageValue = "@null";
       }
       const prefs = [];
-      if (
-        (typeOrLanguageValue === "@id" || typeOrLanguageValue === "@reverse") &&
-        _isObject(value) &&
-        "@id" in value
-      ) {
+      if ((typeOrLanguageValue === "@id" || typeOrLanguageValue === "@reverse") && _isObject(value) && "@id" in value) {
         if (typeOrLanguageValue === "@reverse") {
           prefs.push("@reverse");
         }
-        const term = api.compactIri({
-          activeCtx,
-          iri: value["@id"],
-          relativeTo: { vocab: true },
-        });
-        if (
-          activeCtx.mappings.has(term) &&
-          activeCtx.mappings.get(term) &&
-          activeCtx.mappings.get(term)["@id"] === value["@id"]
-        ) {
+        const term = api.compactIri({ activeCtx, iri: value["@id"], relativeTo: { vocab: true } });
+        if (activeCtx.mappings.has(term) && activeCtx.mappings.get(term) && activeCtx.mappings.get(term)["@id"] === value["@id"]) {
           prefs.push.apply(prefs, ["@vocab", "@id"]);
         } else {
           prefs.push.apply(prefs, ["@id", "@vocab"]);
@@ -6338,18 +5089,11 @@ var require_compact = __commonJS({
       return null;
     }
     function _checkNestProperty(activeCtx, nestProperty, options) {
-      if (
-        _expandIri(activeCtx, nestProperty, { vocab: true }, options) !==
-        "@nest"
-      ) {
-        throw new JsonLdError(
-          "JSON-LD compact error; nested property must have an @nest value resolving to @nest.",
-          "jsonld.SyntaxError",
-          { code: "invalid @nest value" }
-        );
+      if (_expandIri(activeCtx, nestProperty, { vocab: true }, options) !== "@nest") {
+        throw new JsonLdError("JSON-LD compact error; nested property must have an @nest value resolving to @nest.", "jsonld.SyntaxError", { code: "invalid @nest value" });
       }
     }
-  },
+  }
 });
 
 // lib/JsonLdProcessor.js
@@ -6364,41 +5108,35 @@ var require_JsonLdProcessor = __commonJS({
       }
       Object.defineProperty(JsonLdProcessor, "prototype", {
         writable: false,
-        enumerable: false,
+        enumerable: false
       });
       Object.defineProperty(JsonLdProcessor.prototype, "constructor", {
         writable: true,
         enumerable: false,
         configurable: true,
-        value: JsonLdProcessor,
+        value: JsonLdProcessor
       });
-      JsonLdProcessor.compact = function (input, ctx) {
+      JsonLdProcessor.compact = function(input, ctx) {
         if (arguments.length < 2) {
-          return Promise.reject(
-            new TypeError("Could not compact, too few arguments.")
-          );
+          return Promise.reject(new TypeError("Could not compact, too few arguments."));
         }
         return jsonld.compact(input, ctx);
       };
-      JsonLdProcessor.expand = function (input) {
+      JsonLdProcessor.expand = function(input) {
         if (arguments.length < 1) {
-          return Promise.reject(
-            new TypeError("Could not expand, too few arguments.")
-          );
+          return Promise.reject(new TypeError("Could not expand, too few arguments."));
         }
         return jsonld.expand(input);
       };
-      JsonLdProcessor.flatten = function (input) {
+      JsonLdProcessor.flatten = function(input) {
         if (arguments.length < 1) {
-          return Promise.reject(
-            new TypeError("Could not flatten, too few arguments.")
-          );
+          return Promise.reject(new TypeError("Could not flatten, too few arguments."));
         }
         return jsonld.flatten(input);
       };
       return JsonLdProcessor;
     };
-  },
+  }
 });
 
 // lib/jsonld.js
@@ -6415,42 +5153,38 @@ var require_jsonld = __commonJS({
     var { toRDF: _toRDF } = require_toRdf();
     var {
       frameMergedOrDefault: _frameMergedOrDefault,
-      cleanupNull: _cleanupNull,
+      cleanupNull: _cleanupNull
     } = require_frame();
     var {
       isArray: _isArray,
       isObject: _isObject,
-      isString: _isString,
+      isString: _isString
     } = require_types();
     var { isSubjectReference: _isSubjectReference } = require_graphTypes();
     var {
       expandIri: _expandIri,
       getInitialContext: _getInitialContext,
       process: _processContext,
-      processingMode: _processingMode,
+      processingMode: _processingMode
     } = require_context();
     var { compact: _compact, compactIri: _compactIri } = require_compact();
     var {
       createNodeMap: _createNodeMap,
       createMergedNodeMap: _createMergedNodeMap,
-      mergeNodeMaps: _mergeNodeMaps,
+      mergeNodeMaps: _mergeNodeMaps
     } = require_nodeMap();
-    var wrapper = function (jsonld) {
+    var wrapper = function(jsonld) {
       const _rdfParsers = {};
       const RESOLVED_CONTEXT_CACHE_MAX_SIZE = 100;
       const _resolvedContextCache = new LRU({
-        max: RESOLVED_CONTEXT_CACHE_MAX_SIZE,
+        max: RESOLVED_CONTEXT_CACHE_MAX_SIZE
       });
-      jsonld.compact = async function (input, ctx, options) {
+      jsonld.compact = async function(input, ctx, options) {
         if (arguments.length < 2) {
           throw new TypeError("Could not compact, too few arguments.");
         }
         if (ctx === null) {
-          throw new JsonLdError(
-            "The compaction context must not be null.",
-            "jsonld.CompactError",
-            { code: "invalid local context" }
-          );
+          throw new JsonLdError("The compaction context must not be null.", "jsonld.CompactError", { code: "invalid local context" });
         }
         if (input === null) {
           return null;
@@ -6462,10 +5196,9 @@ var require_jsonld = __commonJS({
           graph: false,
           skipExpansion: false,
           link: false,
-          // issuer: new IdentifierIssuer("_:b"),
           contextResolver: new ContextResolver({
-            sharedCache: _resolvedContextCache,
-          }),
+            sharedCache: _resolvedContextCache
+          })
         });
         if (options.link) {
           options.skipExpansion = true;
@@ -6479,16 +5212,12 @@ var require_jsonld = __commonJS({
         } else {
           expanded = await jsonld.expand(input, options);
         }
-        const activeCtx = await jsonld.processContext(
-          _getInitialContext(options),
-          ctx,
-          options
-        );
+        const activeCtx = await jsonld.processContext(_getInitialContext(options), ctx, options);
         let compacted = await _compact({
           activeCtx,
           element: expanded,
           options,
-          compactionMap: options.compactionMap,
+          compactionMap: options.compactionMap
         });
         if (options.compactArrays && !options.graph && _isArray(compacted)) {
           if (compacted.length === 1) {
@@ -6521,7 +5250,7 @@ var require_jsonld = __commonJS({
           const graphAlias = _compactIri({
             activeCtx,
             iri: "@graph",
-            relativeTo: { vocab: true },
+            relativeTo: { vocab: true }
           });
           const graph = compacted;
           compacted = {};
@@ -6538,15 +5267,15 @@ var require_jsonld = __commonJS({
         }
         return compacted;
       };
-      jsonld.expand = async function (input, options) {
+      jsonld.expand = async function(input, options) {
         if (arguments.length < 1) {
           throw new TypeError("Could not expand, too few arguments.");
         }
         options = _setDefaults(options, {
           keepFreeFloatingNodes: false,
           contextResolver: new ContextResolver({
-            sharedCache: _resolvedContextCache,
-          }),
+            sharedCache: _resolvedContextCache
+          })
         });
         if (options.expansionMap === false) {
           options.expansionMap = void 0;
@@ -6585,13 +5314,9 @@ var require_jsonld = __commonJS({
           activeCtx,
           element: toResolve.input,
           options,
-          expansionMap: options.expansionMap,
+          expansionMap: options.expansionMap
         });
-        if (
-          _isObject(expanded) &&
-          "@graph" in expanded &&
-          Object.keys(expanded).length === 1
-        ) {
+        if (_isObject(expanded) && "@graph" in expanded && Object.keys(expanded).length === 1) {
           expanded = expanded["@graph"];
         } else if (expanded === null) {
           expanded = [];
@@ -6601,7 +5326,7 @@ var require_jsonld = __commonJS({
         }
         return expanded;
       };
-      jsonld.flatten = async function (input, ctx, options) {
+      jsonld.flatten = async function(input, ctx, options) {
         if (arguments.length < 1) {
           return new TypeError("Could not flatten, too few arguments.");
         }
@@ -6613,8 +5338,8 @@ var require_jsonld = __commonJS({
         options = _setDefaults(options, {
           base: _isString(input) ? input : "",
           contextResolver: new ContextResolver({
-            sharedCache: _resolvedContextCache,
-          }),
+            sharedCache: _resolvedContextCache
+          })
         });
         const expanded = await jsonld.expand(input, options);
         const flattened = _flatten(expanded);
@@ -6626,7 +5351,7 @@ var require_jsonld = __commonJS({
         const compacted = await jsonld.compact(flattened, ctx, options);
         return compacted;
       };
-      jsonld.frame = async function (input, frame, options) {
+      jsonld.frame = async function(input, frame, options) {
         if (arguments.length < 2) {
           throw new TypeError("Could not frame, too few arguments.");
         }
@@ -6638,8 +5363,8 @@ var require_jsonld = __commonJS({
           omitDefault: false,
           bnodesToClear: [],
           contextResolver: new ContextResolver({
-            sharedCache: _resolvedContextCache,
-          }),
+            sharedCache: _resolvedContextCache
+          })
         });
         if (_isString(frame)) {
           const remoteDoc = await jsonld.get(frame, options);
@@ -6657,11 +5382,7 @@ var require_jsonld = __commonJS({
           }
         }
         const frameContext = frame ? frame["@context"] || {} : {};
-        const activeCtx = await jsonld.processContext(
-          _getInitialContext(options),
-          frameContext,
-          options
-        );
+        const activeCtx = await jsonld.processContext(_getInitialContext(options), frameContext, options);
         if (!options.hasOwnProperty("omitGraph")) {
           options.omitGraph = _processingMode(activeCtx, 1.1);
         }
@@ -6673,9 +5394,7 @@ var require_jsonld = __commonJS({
         opts.isFrame = true;
         opts.keepFreeFloatingNodes = true;
         const expandedFrame = await jsonld.expand(frame, opts);
-        const frameKeys = Object.keys(frame).map((key) =>
-          _expandIri(activeCtx, key, { vocab: true })
-        );
+        const frameKeys = Object.keys(frame).map((key) => _expandIri(activeCtx, key, { vocab: true }));
         opts.merged = !frameKeys.includes("@graph");
         opts.is11 = _processingMode(activeCtx, 1.1);
         const framed = _frameMergedOrDefault(expanded, expandedFrame, opts);
@@ -6688,7 +5407,7 @@ var require_jsonld = __commonJS({
         compacted = _cleanupNull(compacted, opts);
         return compacted;
       };
-      jsonld.link = async function (input, ctx, options) {
+      jsonld.link = async function(input, ctx, options) {
         const frame = {};
         if (ctx) {
           frame["@context"] = ctx;
@@ -6696,7 +5415,7 @@ var require_jsonld = __commonJS({
         frame["@embed"] = "@link";
         return jsonld.frame(input, frame, options);
       };
-      jsonld.normalize = jsonld.canonize = async function (input, options) {
+      jsonld.normalize = jsonld.canonize = async function(input, options) {
         if (arguments.length < 1) {
           throw new TypeError("Could not canonize, too few arguments.");
         }
@@ -6705,18 +5424,12 @@ var require_jsonld = __commonJS({
           algorithm: "URDNA2015",
           skipExpansion: false,
           contextResolver: new ContextResolver({
-            sharedCache: _resolvedContextCache,
-          }),
+            sharedCache: _resolvedContextCache
+          })
         });
         if ("inputFormat" in options) {
-          if (
-            options.inputFormat !== "application/n-quads" &&
-            options.inputFormat !== "application/nquads"
-          ) {
-            throw new JsonLdError(
-              "Unknown canonicalization input format.",
-              "jsonld.CanonizeError"
-            );
+          if (options.inputFormat !== "application/n-quads" && options.inputFormat !== "application/nquads") {
+            throw new JsonLdError("Unknown canonicalization input format.", "jsonld.CanonizeError");
           }
           const parsedInput = NQuads.parse(input);
           return canonize.canonize(parsedInput, options);
@@ -6727,25 +5440,21 @@ var require_jsonld = __commonJS({
         const dataset = await jsonld.toRDF(input, opts);
         return canonize.canonize(dataset, options);
       };
-      jsonld.fromRDF = async function (dataset, options) {
+      jsonld.fromRDF = async function(dataset, options) {
         if (arguments.length < 1) {
           throw new TypeError("Could not convert from RDF, too few arguments.");
         }
         options = _setDefaults(options, {
-          format: _isString(dataset) ? "application/n-quads" : void 0,
+          format: _isString(dataset) ? "application/n-quads" : void 0
         });
         const { format } = options;
         let { rdfParser } = options;
         if (format) {
           rdfParser = rdfParser || _rdfParsers[format];
           if (!rdfParser) {
-            throw new JsonLdError(
-              "Unknown input format.",
-              "jsonld.UnknownFormat",
-              {
-                format,
-              }
-            );
+            throw new JsonLdError("Unknown input format.", "jsonld.UnknownFormat", {
+              format
+            });
           }
         } else {
           rdfParser = () => dataset;
@@ -6753,7 +5462,7 @@ var require_jsonld = __commonJS({
         const parsedDataset = await rdfParser(dataset);
         return _fromRDF(parsedDataset, options);
       };
-      jsonld.toRDF = async function (input, options) {
+      jsonld.toRDF = async function(input, options) {
         if (arguments.length < 1) {
           throw new TypeError("Could not convert to RDF, too few arguments.");
         }
@@ -6761,8 +5470,8 @@ var require_jsonld = __commonJS({
           base: _isString(input) ? input : "",
           skipExpansion: false,
           contextResolver: new ContextResolver({
-            sharedCache: _resolvedContextCache,
-          }),
+            sharedCache: _resolvedContextCache
+          })
         });
         let expanded;
         if (options.skipExpansion) {
@@ -6772,36 +5481,29 @@ var require_jsonld = __commonJS({
         }
         const dataset = _toRDF(expanded, options);
         if (options.format) {
-          if (
-            options.format === "application/n-quads" ||
-            options.format === "application/nquads"
-          ) {
+          if (options.format === "application/n-quads" || options.format === "application/nquads") {
             return NQuads.serialize(dataset);
           }
-          throw new JsonLdError(
-            "Unknown output format.",
-            "jsonld.UnknownFormat",
-            {
-              format: options.format,
-            }
-          );
+          throw new JsonLdError("Unknown output format.", "jsonld.UnknownFormat", {
+            format: options.format
+          });
         }
         return dataset;
       };
-      jsonld.createNodeMap = async function (input, options) {
+      jsonld.createNodeMap = async function(input, options) {
         if (arguments.length < 1) {
           throw new TypeError("Could not create node map, too few arguments.");
         }
         options = _setDefaults(options, {
           base: _isString(input) ? input : "",
           contextResolver: new ContextResolver({
-            sharedCache: _resolvedContextCache,
-          }),
+            sharedCache: _resolvedContextCache
+          })
         });
         const expanded = await jsonld.expand(input, options);
         return _createMergedNodeMap(expanded, options);
       };
-      jsonld.merge = async function (docs, ctx, options) {
+      jsonld.merge = async function(docs, ctx, options) {
         if (arguments.length < 1) {
           throw new TypeError("Could not merge, too few arguments.");
         }
@@ -6815,15 +5517,13 @@ var require_jsonld = __commonJS({
         }
         options = _setDefaults(options, {
           contextResolver: new ContextResolver({
-            sharedCache: _resolvedContextCache,
-          }),
-        });
-        const expanded = await Promise.all(
-          docs.map((doc) => {
-            const opts = { ...options };
-            return jsonld.expand(doc, opts);
+            sharedCache: _resolvedContextCache
           })
-        );
+        });
+        const expanded = await Promise.all(docs.map((doc) => {
+          const opts = { ...options };
+          return jsonld.expand(doc, opts);
+        }));
         let mergeNodes = true;
         if ("mergeNodes" in options) {
           mergeNodes = options.mergeNodes;
@@ -6832,7 +5532,7 @@ var require_jsonld = __commonJS({
         const graphs = { "@default": {} };
         for (let i = 0; i < expanded.length; ++i) {
           const doc = util.relabelBlankNodes(expanded[i], {
-            issuer: new IdentifierIssuer("_:b" + i + "-"),
+            issuer: new IdentifierIssuer("_:b" + i + "-")
           });
           const _graphs = mergeNodes || i === 0 ? graphs : { "@default": {} };
           _createNodeMap(doc, _graphs, "@default", issuer);
@@ -6871,16 +5571,12 @@ var require_jsonld = __commonJS({
       };
       Object.defineProperty(jsonld, "documentLoader", {
         get: () => jsonld._documentLoader,
-        set: (v) => (jsonld._documentLoader = v),
+        set: (v) => jsonld._documentLoader = v
       });
       jsonld.documentLoader = async (url) => {
-        throw new JsonLdError(
-          "Could not retrieve a JSON-LD document from the URL. URL dereferencing not implemented.",
-          "jsonld.LoadDocumentError",
-          { code: "loading document failed", url }
-        );
+        throw new JsonLdError("Could not retrieve a JSON-LD document from the URL. URL dereferencing not implemented.", "jsonld.LoadDocumentError", { code: "loading document failed", url });
       };
-      jsonld.get = async function (url, options) {
+      jsonld.get = async function(url, options) {
         let load;
         if (typeof options.documentLoader === "function") {
           load = options.documentLoader;
@@ -6890,33 +5586,26 @@ var require_jsonld = __commonJS({
         const remoteDoc = await load(url);
         try {
           if (!remoteDoc.document) {
-            throw new JsonLdError(
-              "No remote document found at the given URL.",
-              "jsonld.NullRemoteDocument"
-            );
+            throw new JsonLdError("No remote document found at the given URL.", "jsonld.NullRemoteDocument");
           }
           if (_isString(remoteDoc.document)) {
             remoteDoc.document = JSON.parse(remoteDoc.document);
           }
         } catch (e) {
-          throw new JsonLdError(
-            "Could not retrieve a JSON-LD document from the URL.",
-            "jsonld.LoadDocumentError",
-            {
-              code: "loading document failed",
-              cause: e,
-              remoteDoc,
-            }
-          );
+          throw new JsonLdError("Could not retrieve a JSON-LD document from the URL.", "jsonld.LoadDocumentError", {
+            code: "loading document failed",
+            cause: e,
+            remoteDoc
+          });
         }
         return remoteDoc;
       };
-      jsonld.processContext = async function (activeCtx, localCtx, options) {
+      jsonld.processContext = async function(activeCtx, localCtx, options) {
         options = _setDefaults(options, {
           base: "",
           contextResolver: new ContextResolver({
-            sharedCache: _resolvedContextCache,
-          }),
+            sharedCache: _resolvedContextCache
+          })
         });
         if (localCtx === null) {
           return _getInitialContext(options);
@@ -6929,23 +5618,16 @@ var require_jsonld = __commonJS({
       };
       jsonld.getContextValue = require_context().getContextValue;
       jsonld.documentLoaders = {};
-      jsonld.useDocumentLoader = function (type) {
+      jsonld.useDocumentLoader = function(type) {
         if (!(type in jsonld.documentLoaders)) {
-          throw new JsonLdError(
-            'Unknown document loader type: "' + type + '"',
-            "jsonld.UnknownDocumentLoader",
-            { type }
-          );
+          throw new JsonLdError('Unknown document loader type: "' + type + '"', "jsonld.UnknownDocumentLoader", { type });
         }
-        jsonld.documentLoader = jsonld.documentLoaders[type].apply(
-          jsonld,
-          Array.prototype.slice.call(arguments, 1)
-        );
+        jsonld.documentLoader = jsonld.documentLoaders[type].apply(jsonld, Array.prototype.slice.call(arguments, 1));
       };
-      jsonld.registerRDFParser = function (contentType, parser) {
+      jsonld.registerRDFParser = function(contentType, parser) {
         _rdfParsers[contentType] = parser;
       };
-      jsonld.unregisterRDFParser = function (contentType) {
+      jsonld.unregisterRDFParser = function(contentType) {
         delete _rdfParsers[contentType];
       };
       jsonld.url = require_url();
@@ -6956,22 +5638,19 @@ var require_jsonld = __commonJS({
       jsonld.JsonLdProcessor = require_JsonLdProcessor()(jsonld);
       platform.setupGlobals(jsonld);
       platform.setupDocumentLoaders(jsonld);
-      function _setDefaults(
-        options,
-        { documentLoader = jsonld.documentLoader, ...defaults }
-      ) {
+      function _setDefaults(options, { documentLoader = jsonld.documentLoader, ...defaults }) {
         return Object.assign({}, { documentLoader }, defaults, options);
       }
       return jsonld;
     };
-    var factory = function () {
-      return wrapper(function () {
+    var factory = function() {
+      return wrapper(function() {
         return factory();
       });
     };
     wrapper(factory);
     module.exports = factory;
-  },
+  }
 });
 export default require_jsonld();
 /**
